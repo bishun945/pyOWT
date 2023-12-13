@@ -48,6 +48,32 @@ def classification(wavelen, Rrs):
 
     return u
 
+def calssification_vec(AVW, Area, NDI):
+    
+    """load centroids"""
+    classInfo = load_centroids()
+    mean_OWT = classInfo["mean_OWT"]
+    covm_OWT = classInfo["covm_OWT"]
+    lamBC = classInfo["lamBC"]
+    # typeName = classInfo["typeName"]
+    typeNumb = classInfo["typeNumb"]
+
+    ABC = misc.trans_boxcox(Area, lamBC)
+
+    x = np.array([AVW, ABC, NDI]).transpose(1, 2, 0)
+    d = np.zeros((x.shape[0], x.shape[1], typeNumb))
+
+    for i in range(typeNumb):
+        y = mean_OWT[i, :][None, None, :]
+        covm = covm_OWT[i, :, :]
+        covm_inv = np.linalg.inv(covm)
+        diff = x - y
+        d[:,:,i] = np.einsum("...i,ij,...j->...", diff, covm_inv, diff)
+    
+    u = np.round(1 - chi2.cdf(d, df = x.shape[2]), 6)
+
+    return u
+
 
 def read_Rrs_demo():
     """read some demo Rrs data from R library"""
