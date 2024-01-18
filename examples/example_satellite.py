@@ -1,3 +1,9 @@
+"""
+This file shows an example of running the OWT functions for a netcdf data (derived by A4O).
+Shun Bi
+Shun.Bi@hereon.de
+"""
+
 from netCDF4 import Dataset as ds
 import numpy as np
 import matplotlib.pyplot as plt
@@ -67,7 +73,7 @@ Rrs_for_NDI = Rrs_A4O[:, :, np.where(np.isin(wavelen_A4O_Rrs, [560, 665]))[0]]
 NDI = misc.cal_NDI_vec(Rrs_for_NDI)
 
 # do the classification
-u = classification.calssification_vec(AVW, Area, NDI)
+u = classification.classification_vec(AVW, Area, NDI)
 water_type = np.argmax(u, axis = -1)
 water_type[np.all(np.isnan(u), axis = -1)] = -1
 

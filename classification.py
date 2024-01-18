@@ -4,6 +4,41 @@ import pandas as pd
 import netCDF4 as nc
 from scipy.stats import chi2
 
+def classification_vec(AVW, Area, NDI):
+    """Classification function vectorized version
+
+    Args:
+        AVW (np.array): Apparent Visible Wavelength 400-800 nm
+        Area (np.array): Trapezoidal area of Rrs at Red Green Blue bands
+        NDI (np.array): Normalized Difference Index of Rrs at Green and Red bands
+
+    Returns:
+        np.array: result of membership values for ten types
+    """    
+    """load centroids"""
+    classInfo = load_centroids()
+    mean_OWT = classInfo["mean_OWT"]
+    covm_OWT = classInfo["covm_OWT"]
+    lamBC = classInfo["lamBC"]
+    # typeName = classInfo["typeName"]
+    typeNumb = classInfo["typeNumb"]
+
+    ABC = misc.trans_boxcox(Area, lamBC)
+
+    x = np.array([AVW, ABC, NDI]).transpose(1, 2, 0)
+    d = np.zeros((x.shape[0], x.shape[1], typeNumb))
+
+    for i in range(typeNumb):
+        y = mean_OWT[i, :][None, None, :]
+        covm = covm_OWT[i, :, :]
+        covm_inv = np.linalg.inv(covm)
+        diff = x - y
+        d[:, :, i] = np.einsum("...i,ij,...j->...", diff, covm_inv, diff)
+
+    u = np.round(1 - chi2.cdf(d, df=x.shape[2]), 6)
+
+    return u
+
 
 def classification(wavelen, Rrs):
     """
@@ -45,32 +80,6 @@ def classification(wavelen, Rrs):
 
     # Calcualte membership values using Chi2 CDF on df = 3
     u = np.round(1 - chi2.cdf(d, df=len(x)), 6)
-
-    return u
-
-def calssification_vec(AVW, Area, NDI):
-    
-    """load centroids"""
-    classInfo = load_centroids()
-    mean_OWT = classInfo["mean_OWT"]
-    covm_OWT = classInfo["covm_OWT"]
-    lamBC = classInfo["lamBC"]
-    # typeName = classInfo["typeName"]
-    typeNumb = classInfo["typeNumb"]
-
-    ABC = misc.trans_boxcox(Area, lamBC)
-
-    x = np.array([AVW, ABC, NDI]).transpose(1, 2, 0)
-    d = np.zeros((x.shape[0], x.shape[1], typeNumb))
-
-    for i in range(typeNumb):
-        y = mean_OWT[i, :][None, None, :]
-        covm = covm_OWT[i, :, :]
-        covm_inv = np.linalg.inv(covm)
-        diff = x - y
-        d[:,:,i] = np.einsum("...i,ij,...j->...", diff, covm_inv, diff)
-    
-    u = np.round(1 - chi2.cdf(d, df = x.shape[2]), 6)
 
     return u
 
