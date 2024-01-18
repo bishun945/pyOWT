@@ -10,18 +10,19 @@ Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun9
 
 Clone the whole repo and cd to the folder. 
 
-Then, install the requirements.
+Then, install the [requirements](/requirements.txt).
+
 ```console
 pip install -r requirements.txt
 ```
 
 # How to use it
 
-Vectorized functions are recommended to run the satellite data, e.g., `classification.classification_vec`.
+Vectorized functions are recommended to run for the satellite data, e.g., `classification.classification_vec`.
 
 A detailed [example](/examples/example_satellite.py) is provided. 
 
-The example below uses the demo data in the repo:
+A simple example below uses the demo data in the repo
 
 ```python
 import classification
@@ -37,7 +38,7 @@ Rrs = df_sub.Rrs.values
 print(classification.classification(wavelen, Rrs))
 ```
 
-Should return
+Should return membership values as follows
 
 ```console
 [5.1411e-02 6.2110e-03 4.1097e-02 6.7700e-04 1.0000e-06 0.0000e+00
