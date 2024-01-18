@@ -4,6 +4,7 @@ import pandas as pd
 import netCDF4 as nc
 from scipy.stats import chi2
 
+
 def classification_vec(AVW, Area, NDI):
     """Classification function vectorized version
 
@@ -14,7 +15,7 @@ def classification_vec(AVW, Area, NDI):
 
     Returns:
         np.array: result of membership values for ten types
-    """    
+    """
     """load centroids"""
     classInfo = load_centroids()
     mean_OWT = classInfo["mean_OWT"]
