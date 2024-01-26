@@ -1,10 +1,10 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.2
+Version 0.3
 
-[Shun Bi](Shun.Bi@hereon.de) 
+by [Shun Bi](Shun.Bi@hereon.de) 
 
-18.01.2024
+Last update 28.01.2024
 
 Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun945/OWT) for the water type classification and has been maintained independently from its original version.
 
@@ -18,31 +18,45 @@ Then, install the [requirements](/requirements.txt).
 pip install -r requirements.txt
 ```
 
+# License
+
+See the [LICENSE](/LICENSE) file.
+
 # How to use it
 
-Vectorized functions are recommended to run for the satellite data, e.g., `classification.classification_vec`.
-
-A detailed [example](/examples/example_satellite.py) is provided. 
-
-A simple example below uses the demo data in the repo
+Two classes, `OWT` and `OpticalVariables` are needed to perform the OWT classification.
 
 ```python
-import classification
+from OWT import OWT
+from OpticalVariables import OpticalVariables
 
-# prepare the wavelen and Rrs variables
-df = classification.read_Rrs_demo()
-ID_uniques = df.ID.unique()
-df_sub = df[df["ID"] == ID_uniques[0]]
-wavelen = df_sub.wavelen.values
-Rrs = df_sub.Rrs.values
+# first calculate three optical variables from Rrs
+# `sensor` should be specified for satellite data
+ov = OpticalVariables(Rrs=Rrs_data, band=Band_list, sensor=Sensor_str)
+ov.run()
 
-# run the classification function
-print(classification.classification(wavelen, Rrs))
+# feed data into classification
+owt = OWT(AVW=ov.AVW, Area=ov.Area, NDI=ov.NDI)
+owt.run_classification()
+
+# show classification results
+print(owt.type_str) 
 ```
 
-Should return membership values as follows
+Check the [example](/run_examples.py) file for more detailed demo runs:
 
-```console
-[5.1411e-02 6.2110e-03 4.1097e-02 6.7700e-04 1.0000e-06 0.0000e+00
- 0.0000e+00 0.0000e+00 0.0000e+00 4.0000e-06]
-```
+1) Some hyperspectral Remote-sensing reflectance data simulated by Bi et al. (2023)
+
+2) Satellite data with atmosphericly corrected by A4O (Hieronymi et al. 2023)
+
+# Bug rerport
+
+When you find any issues or bugs while running the module, please [open an issue](https://github.com/bishun945/pyOWT/issues) or directly contact [Shun Bi](Shun.Bi@hereon.de) with a reproducible script with data.
+
+# References
+
+- Bi et al. (2023). Bio-geo-optical modelling of natural waters. Front. Mar. Sci. 10, 1196352. https://doi.org/10.3389/fmars.2023.1196352
+
+- Bi and Hieronymi (2023). Holistic optical water type classification for ocean, coastal, and inland waters (submitted).
+
+- Hieronymi et al. (2023). Ocean color atmospheric correction methods in view of usability for different optical water types. Front. Mar. Sci. 10, 1129876. https://doi.org/10.3389/fmars.2023.1129876 
