@@ -1,6 +1,6 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.3
+Version 0.31
 
 by [Shun Bi](Shun.Bi@hereon.de) 
 
