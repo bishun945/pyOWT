@@ -86,7 +86,7 @@ class OWT():
         """Run the classification procedure
 
         Returns:
-            np.array, ndim <= 2: membership values for pre-defined 10 types
+            np.array, ndim <= 3: membership values for pre-defined 10 types
         """
 
         self.ABC = self.trans_boxcox(self.Area, self.lamBC)
