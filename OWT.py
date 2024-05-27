@@ -2,6 +2,8 @@ import numpy as np
 import netCDF4 as nc
 from scipy.stats import chi2
 
+import os
+
 class OWT():
 
     def __init__(self, AVW, Area, NDI):
@@ -114,14 +116,15 @@ class OWT():
     def load_centroids():
         """
         load the centroids for classification
-        For the "./data/OWT_centroids.nc" file, three variables included:
+        For the "data/OWT_centroids.nc" file, three variables included:
         - [mean] mean of each optical water type (OWT) at three dims
         - [covm] covariance matrix (3x3) of each OWT
         - [lamBC] lambda coeffcient for the Box-Cox transformation
         Dimensions: [AVW, Area, NDI]
         Note: Area in the nc lib is after Box-Cox transformation
         """
-        fn = "./data/OWT_centroids.nc"
+        proj_root = os.path.dirname(os.path.abspath(__file__))
+        fn = os.path.join(proj_root, "data", "OWT_centroids.nc")
         ds = nc.Dataset(fn)
         mean_OWT = ds.variables["mean"][:]
         covm_OWT = ds.variables["covm"][:]

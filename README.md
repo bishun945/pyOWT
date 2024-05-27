@@ -1,10 +1,10 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.31
+Version 0.32
 
 by [Shun Bi](Shun.Bi@hereon.de) 
 
-Last update 28.01.2024
+Last update 27.05.2024
 
 Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun945/OWT) for the water type classification and has been maintained independently from its original version.
 
@@ -57,6 +57,6 @@ When you find any issues or bugs while running the module, please [open an issue
 
 - Bi et al. (2023). Bio-geo-optical modelling of natural waters. Front. Mar. Sci. 10, 1196352. https://doi.org/10.3389/fmars.2023.1196352
 
-- Bi and Hieronymi (2023). Holistic optical water type classification for ocean, coastal, and inland waters (submitted).
+- Bi and Hieronymi (2023). Holistic optical water type classification for ocean, coastal, and inland waters (under review).
 
 - Hieronymi et al. (2023). Ocean color atmospheric correction methods in view of usability for different optical water types. Front. Mar. Sci. 10, 1129876. https://doi.org/10.3389/fmars.2023.1129876 
