@@ -153,3 +153,4 @@ cython_debug/
 
 .DS_Store
 archive/
+test_running/
