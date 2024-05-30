@@ -1,11 +1,30 @@
 from pandas import read_csv
 import numpy as np
+import os
 
 class OpticalVariables():
 
     def __init__(self, Rrs, band, sensor=None, AVW_regression_coef="data/AVW_all_regression.txt"):
 
-        self.Rrs = Rrs
+        if not isinstance(Rrs, np.ndarray):
+
+            raise TypeError("Input 'Rrs' should be np.ndarray type.")        
+
+        # manipulate dimension of input Rrs as we always assume it is 3d nparray (raster-like)
+        #   the wavelength should be on the shape[2] dim
+
+        if np.ndim(Rrs) == 1:
+            # here assume a signle spectrum
+            self.Rrs = Rrs.reshape(1, 1, Rrs.shape[0])
+        elif np.ndim(Rrs) == 2:
+            # here assume shape[0] is sample and shape[1] is wavelength
+            self.Rrs = Rrs.reshape(Rrs.shape[0], 1, Rrs.shape[1])
+        elif np.ndim(Rrs) == 3:
+            # here assume shape[2] is wavelength
+            self.Rrs = Rrs
+        else:
+            raise ValueError("Input 'Rrs' should only have 1, 2, or 3 dims!")
+
         self.band = np.array(band)
 
         self.sensor = sensor
@@ -102,10 +121,16 @@ class OpticalVariables():
             self.sensor_band_max = self.sensor_RGB_min_max[self.sensor]["max"]
 
             # read coefficients to convert AVW_multi to AVW_hyper
-            d = read_csv(AVW_regression_coef)
+            proj_root = os.path.dirname(os.path.abspath(__file__))
+            fn = os.path.join(proj_root, AVW_regression_coef)
+            d = read_csv(fn)
             self.AVW_convert_coef = d[d["variable"] == sensor][["0", "1", "2", "3", "4", "5"]].values.tolist()[0]
-    
-      
+
+
+        # run calculation
+        self.calculate_AVW()
+        self.calculate_Area()
+        self.calculate_NDI()
 
     def convert_AVW_multi_to_hyper(self):
         self.AVW_hyper = np.zeros(self.AVW_multi.shape)
@@ -140,6 +165,15 @@ class OpticalVariables():
 
 
     def run(self):
+        import warnings
+        warnings.warn(
+            "No need to calculate via 'ov.run()'. "
+            "The optical variables will be calculated directly once you create this instance. "
+            "This function is deprecated and will be removed in the future versions.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+
         self.calculate_AVW()
         self.calculate_Area()
         self.calculate_NDI()
@@ -148,6 +182,11 @@ class OpticalVariables():
 
 if __name__ == "__main__":
 
-    ov = OpticalVariables(Rrs=1, band=1, sensor="OLCI_S3B")
-    print(ov.sensor_RGB_bands)
+    # ov = OpticalVariables(Rrs=1, band=1, sensor="OLCI_S3B")
+    # print(ov.sensor_RGB_bands)
+    band = np.arange(400, 801, step = 2)
+    # Rrs = np.random.normal(loc = 0, scale = 1, size = len(band))
+    Rrs = np.full(len(band), 1)
+    ov = OpticalVariables(Rrs=Rrs, band=band)
+    print(ov.AVW)
 

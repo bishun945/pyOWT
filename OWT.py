@@ -6,13 +6,17 @@ import os
 
 class OWT():
 
-    def __init__(self, AVW, Area, NDI):
+    def __init__(self, AVW=None, Area=None, NDI=None):
         """Initialize three optical variables for spectral classification
 
         Args:
             AVW (np.array, ndim <= 2): Apparent Visible Wavelength 400-800 nm
             Area (np.array, ndim <= 2): Trapezoidal area of Rrs at RGB bands
             NDI (np.array, ndim <= 2): Normalized Difference Index of Rrs at G and B bands
+
+        Attributes:
+            u (np.array, ndim = 3): the first and second dims are from AVW or np.atleast_2d(AVW).
+              Its last dim is water type (N = 10)
         """
 
         self.AVW = AVW
@@ -55,8 +59,11 @@ class OWT():
         self.type_idx = np.full(self.AVW.shape, None)
         self.type_str = np.full(self.AVW.shape, None)
 
-        # TODO: use Martin's level to define classifiability
+        # TODO use Martin's level to define classifiability?
         self.classifiability = np.full(self.AVW.shape, None) 
+
+        # run classification
+        self.run_classification()
 
     def update_type_idx(self):
         """Update the type (index of `typeName`) based on the current membership value. 
@@ -91,6 +98,15 @@ class OWT():
             np.array, ndim <= 3: membership values for pre-defined 10 types
         """
 
+        import warnings
+        warnings.warn(
+            "No need to calculate via 'owt.run_classification()'. "
+            "The classification will be performed directly once you create this instance. "
+            "This function is deprecated and will be removed in the future versions.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        
         self.ABC = self.trans_boxcox(self.Area, self.lamBC)
 
         x = np.array([self.AVW, self.ABC, self.NDI]).transpose(1, 2, 0)
@@ -110,7 +126,6 @@ class OWT():
         self.update_type_idx()
         self.update_type_str()
 
-        return u
     
     @staticmethod
     def load_centroids():
@@ -124,7 +139,7 @@ class OWT():
         Note: Area in the nc lib is after Box-Cox transformation
         """
         proj_root = os.path.dirname(os.path.abspath(__file__))
-        fn = os.path.join(proj_root, "data", "OWT_centroids.nc")
+        fn = os.path.join(proj_root, "data/OWT_centroids.nc")
         ds = nc.Dataset(fn)
         mean_OWT = ds.variables["mean"][:]
         covm_OWT = ds.variables["covm"][:]
@@ -184,4 +199,5 @@ if __name__ == "__main__":
     owt = OWT(AVW = [560, 400], Area = [1, 0.9], NDI = [0.2, 0.0])
     print(owt.type_idx)
     print(owt.type_str)
+    print(owt.u.shape[0:2])
 

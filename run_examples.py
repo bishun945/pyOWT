@@ -16,11 +16,9 @@ band = d.columns.tolist()
 
 # create `ov` class to calculate three optical variables
 ov = OpticalVariables(Rrs=Rrs, band=band)
-ov.run()
 
 # create `owt` class to run optical classification
 owt = OWT(ov.AVW, ov.Area, ov.NDI)
-owt.run_classification()
 
 owt_result = owt.type_str.flatten()
 
@@ -86,11 +84,9 @@ Rrs_A4O = np.array([d.variables[x][:] for x in var_A4O_Rrs]).transpose(1, 2, 0)
 
 # create `ov` class to calculate three optical variables
 ov = OpticalVariables(Rrs=Rrs_A4O, band=wavelen_A4O_Rrs, sensor="OLCI_S3A")
-ov.run()
 
 # create `owt` class to run optical classification
 owt = OWT(ov.AVW, ov.Area, ov.NDI)
-owt.run_classification()
 
 # setup colarbar
 cmap = mcolors.ListedColormap(owt.dict_idx_color.values())
