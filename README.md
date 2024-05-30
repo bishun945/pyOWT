@@ -1,10 +1,10 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.32
+Version 0.40
 
 by [Shun Bi](Shun.Bi@hereon.de) 
 
-Last update 27.05.2024
+Last update 30.05.2024
 
 Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun945/OWT) for the water type classification and has been maintained independently from its original version.
 
@@ -29,18 +29,28 @@ Two classes, `OWT` and `OpticalVariables` are needed to perform the OWT classifi
 ```python
 from OWT import OWT
 from OpticalVariables import OpticalVariables
+from PlotOWT import PlotOV, PlotSpec
 
 # first calculate three optical variables from Rrs
 # `sensor` should be specified for satellite data
 ov = OpticalVariables(Rrs=Rrs_data, band=Band_list, sensor=Sensor_str)
-ov.run()
 
 # feed data into classification
 owt = OWT(AVW=ov.AVW, Area=ov.Area, NDI=ov.NDI)
-owt.run_classification()
 
 # show classification results
 print(owt.type_str) 
+
+# show plots
+
+## scatter plot
+PlotOV(owt) 
+
+## spectral distribution
+PlotSpec(owt, ov, norm=False) 
+
+## spectral distribution - normalized
+PlotSpec(owt, ov, norm=True)
 ```
 
 Check the [example](/run_examples.py) file for more detailed demo runs:
@@ -49,14 +59,39 @@ Check the [example](/run_examples.py) file for more detailed demo runs:
 
 2) Satellite data with atmosphericly corrected by A4O (Hieronymi et al. 2023)
 
+# Short description of OWTs
+
+|OWT | Desciption |
+|----|------------|
+| 1  | Extremely clear and oligotrophic indigo-blue waters with high reflectance in the short visible wavelengths. |
+| 2  | Blue waters with similar biomass level as OWT 1 but with slightly higher detritus and CDOM content. |
+| 3a | Turquoise waters with slightly higher phytoplankton, detritus, and CDOM compared to the first two types. |
+| 3b | A special case of OWT 3a with similar detritus and CDOM distribution but with strong scattering and little absorbing particles like in the case of Coccolithophore blooms. This type usually appears brighter and exhibits a remarkable ~490 nm reflectance peak. |
+| 4a | Greenish water found in coastal and inland environments, with higher biomass compared to the previous water types. Reflectance in short wavelengths is usually depressed by the absorption of particles and CDOM. |
+| 4b | A special case of OWT 4a, sharing similar detritus and CDOM distribution, exhibiting phytoplankton blooms with higher scattering coefficients, e.g., Coccolithophore bloom. The color of this type shows a very bright green. |
+| 5a | Green eutrophic water, with significantly higher phytoplankton biomass, exhibiting a bimodal reflectance shape with typical peaks at ~560 and ~709 nm.|
+| 5b | Green hyper-eutrophic water, with even higher biomass than that of OWT 5a (over several orders of magnitude), displaying a reflectance plateau in the Near Infrared Region, NIR (vegetation-like spectrum). |
+| 6  | Bright brown water with high detritus concentrations, which has a high reflectance determined by scattering. |
+| 7  | Dark brown to black water with very high CDOM concentration, which has low reflectance in the entire visible range and is dominated by absorption.  |
+
+<br>
+
+<center>
+
+<img src="figs/owt_spec.png" alt="owt_spec" width="500"/>
+
+</center>
+
+*Mean spectrum of simulated spectra for optical water types. Panel (A) displays the raw remote-sensing reflectance (unscaled), while Panel (B) shows the spectral normalized by trapezoidal-area. The positions of RGB bands are marked on the x-axis.*
+
 # Bug rerport
 
 When you find any issues or bugs while running the module, please [open an issue](https://github.com/bishun945/pyOWT/issues) or directly contact [Shun Bi](Shun.Bi@hereon.de) with a reproducible script with data.
 
 # References
 
-- Bi et al. (2023). Bio-geo-optical modelling of natural waters. Front. Mar. Sci. 10, 1196352. https://doi.org/10.3389/fmars.2023.1196352
+- Bi and Hieronymi (2024). Holistic optical water type classification for ocean, coastal, and inland waters. Limnology and Oceanography (accepted).
 
-- Bi and Hieronymi (2023). Holistic optical water type classification for ocean, coastal, and inland waters (under review).
+- Bi et al. (2023). Bio-geo-optical modelling of natural waters. Front. Mar. Sci. 10, 1196352. https://doi.org/10.3389/fmars.2023.1196352
 
 - Hieronymi et al. (2023). Ocean color atmospheric correction methods in view of usability for different optical water types. Front. Mar. Sci. 10, 1129876. https://doi.org/10.3389/fmars.2023.1129876 
