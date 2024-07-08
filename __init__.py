@@ -14,8 +14,14 @@ Version history
     - Add new csv file (data/OWT_mean_spec.csv) for mean spectra of OWTs
     - run_examples.py revised accordingly
 
+0.41:
+    - Fig bugs in satellite sensor waveband settings and add new setups
+    - Add new subcalss in `OpticalVariables`, `ArrayWithAttributes`, to allow attributes for np.array
+    - A new demo of Rrs updated in the folder `data`
+    - `run_examples.py` add Google Drive link for demo satellite data
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.40"
+__version__ = "0.41"
 

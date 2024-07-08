@@ -24,11 +24,11 @@ owt_result = owt.type_str.flatten()
 
 # print(owt_train)
 print('Result OWT:', owt_result)
-## NOTE:
-# you might see the difference between training labels and results
-# mainly due to the similar membership levels for both types
-# also remember the training data encompasses quite high variability to ensure enough variance
 
+# OWT result visualization
+from PlotOWT import PlotOV, PlotSpec
+PlotOV(owt)
+PlotSpec(owt, ov)
 
 """
 (2) Test for satellite data (A4O results)
@@ -67,7 +67,8 @@ def str_match(input, pattern, ind=False):
     return indices
 
 # data preparation for `ov` and `owt` classes
-# this nc file is ~327MB, hard to be shared via email...
+# this nc file is about 327MB 
+# and can be downloaded from https://drive.google.com/file/d/14ZBq2bUw-dzrXGz2wnCxR-cN09iCA_6v/view?usp=sharing
 fn = "/Users/Bi/Documents/GitHub/OWT/Paper/Apply_framework_to_image_subset/GermanBight_20160720T093421_subset.nc"
 d = ds(fn, mode="r")
 name_var = list(d.variables.keys())

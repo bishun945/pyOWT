@@ -34,6 +34,7 @@ class OpticalVariables():
         self.NDI = None
 
         # TODO: check the input band fits the selected sensor range
+        # TODO: if AVW ends by 700 nm, this list has to be modified
         self.sensor_AVW_bands_library = {
             "MODIS_Aqua": [412, 443, 469, 488, 531, 547, 555, 645, 667, 678, 748, 859],
             "MODIS_Terra": [412, 443, 469, 488, 531, 547, 555, 645, 667, 678, 748, 859],
@@ -50,7 +51,9 @@ class OpticalVariables():
             "CZCS": [443, 520, 550, 670],
             "MSI_S2A": [443, 492, 560, 665, 704, 740, 783, 835],
             "MSI_S2B": [442, 492, 559, 665, 704, 739, 780, 835],
-            "OLI": [443, 482, 655, 865],
+            "OLI": [443, 482, 561, 655, 865],
+            "CMEMS_HROC_L3_optics": [443, 492, 560, 665, 704, 783, 865],
+            "cmems_P1D400": [443, 490, 510, 560, 620, 665, 674, 682, 709, 779, 866],
         }
 
         self.sensor_RGB_bands_library = {
@@ -69,9 +72,12 @@ class OpticalVariables():
             "CZCS": [443, 550, 670],
             "MSI_S2A": [443, 560, 665],
             "MSI_S2B": [442, 559, 665],
-            "OLI": [443, 655, 865],
+            "OLI": [443, 561, 655],
+            "CMEMS_HROC_L3_optics": [443, 560, 665],
+            "cmems_P1D400": [443, 560, 665]
         }
 
+        # TODO: if AVW ends by 700 nm, this list has to be modified
         self.sensor_RGB_min_max = {
             "MODIS_Aqua": {"min": 412, "max": 667},
             "MODIS_Terra": {"min": 412, "max": 667},
@@ -88,7 +94,9 @@ class OpticalVariables():
             "CZCS": {"min": 443, "max": 670},
             "MSI_S2A": {"min": 443, "max": 835},
             "MSI_S2B": {"min": 442, "max": 835},
-            "OLI": {"min": 443, "max": 865}
+            "OLI": {"min": 443, "max": 865},
+            "CMEMS_HROC_L3_optics": {"min": 443, "max": 865},
+            "cmems_P1D400": {"min": 443, "max": 866}
         }
         
         self.available_sensors = ', '.join(self.sensor_AVW_bands_library.keys())
@@ -131,6 +139,42 @@ class OpticalVariables():
         self.calculate_AVW()
         self.calculate_Area()
         self.calculate_NDI()
+
+    class ArrayWithAttributes:
+        '''This subclass add attributes to np.array
+
+        Outputs of `OpticalVariables` (AVW, Area, NDI) can have attributes indicating
+        some key features during the calculation. For example, we can know AVW starts 
+        from 400 to 800 nm while sometimes we need to know it is to 700 nm.
+
+        Examples:
+
+            A = ArrayWithAttributes(np.array([1, 2, 3]), author='Shun')
+            print(A)        # Output: [1 2 3]
+            print(A.author) # Output: Shun
+        '''
+        def __init__(self, array, **attributes):
+            self.array = np.asarray(array)
+            self.__dict__.update(attributes)
+
+        def __getitem__(self, item):
+            return self.array[item]
+
+        def __setitem__(self, key, value):
+            self.array[key] = value
+
+        def __repr__(self):
+            return repr(self.array)
+
+        def __str__(self):
+            return str(self.array)
+
+        def __getattr__(self, name):
+            return getattr(self.array, name)
+
+        def __array__(self):
+            return self.array
+
 
     def convert_AVW_multi_to_hyper(self):
         self.AVW_hyper = np.zeros(self.AVW_multi.shape)

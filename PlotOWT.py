@@ -25,7 +25,11 @@ def _is_instance_of_OpticalVariables(variable):
 
 
 class PlotOV:
-    """Scatter plot of optical variables, AVW, ABC, and NDI."""
+    """Scatter plot of optical variables, AVW, ABC, and NDI.
+
+    Args:
+        owt (OWT): OWT instance
+    """
 
     def __init__(self, owt):
 
