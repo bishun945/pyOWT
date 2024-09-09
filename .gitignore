@@ -154,3 +154,5 @@ cython_debug/
 .DS_Store
 archive/
 test_running/
+data/GermanBight_20160720T093421_subset.nc
+type_owt.png

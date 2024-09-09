@@ -1,5 +1,6 @@
-netCDF4==1.6.4
-numpy==1.26.0
-pandas==2.1.1
-scipy==1.11.2
-yaml
+netCDF4
+numpy
+pandas
+scipy
+PyYAML
+matplotlib

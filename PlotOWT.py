@@ -7,6 +7,7 @@ import os
 from OWT import OWT
 from OpticalVariables import OpticalVariables
 
+
 # Scatter plot ax limits
 AVW_MIN = 430
 AVW_MAX = 730
@@ -114,7 +115,7 @@ class PlotOV:
             )
 
         ax.set_xlabel("AVW [nm]")
-        ax.set_ylabel(r"$\text{A}_{\text{BC}}$")
+        ax.set_ylabel(r"$\mathrm{A}_\mathrm{BC}$")
 
         # Panel 2: AVW vs NDI
         ax = axs[1]
