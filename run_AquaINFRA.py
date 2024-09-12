@@ -6,10 +6,6 @@ from OWT import OWT
 
 import argparse
 
-# will be functions: 
-# 1) for csv input 
-# 2) for some standard satellite data input (netcdf?)
-
 def run_owt_csv(input_path_to_csv, input_sensor, output_path, output_option=1):
     d = pd.read_csv(input_path_to_csv)
     Rrs = d.values.reshape(d.shape[0], 1, d.shape[1])
