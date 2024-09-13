@@ -1,3 +1,10 @@
+'''
+This scripts is for AquaINFRA project to integrate pyOWT into the Galaxy platform
+
+Shun Bi, Shun.Bi@outlook.com
+13.09.2024
+'''
+
 import numpy as np
 import pandas as pd
 
