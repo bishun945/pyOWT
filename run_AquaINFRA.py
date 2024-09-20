@@ -1,17 +1,43 @@
 '''
-This scripts is for AquaINFRA project to integrate pyOWT into the Galaxy platform
+This script is for AquaINFRA project to integrate pyOWT into the Galaxy platform
 
-Shun Bi, Shun.Bi@outlook.com
-13.09.2024
+Examples:
+
+# run in terminal
+
+# csv as input
+python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt'
+python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'MSI_S2A' --output 'data/results/owt_result_msi.txt'
+python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_olci.csv' --input_option 'csv' --sensor 'OLCI_S3A' --output 'data/results/owt_result_olci.txt'
+
+# extensive output
+python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt' --output_option 2
+
+# satellite as input
+python run_AquaINFRA.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'OLCI_S3A' --output '/path/to/save' --output_option 1
+
+Shun Bi, shun.bi@outlook.com
+20.09.2024
 '''
 
+import argparse
+
+# common pkg
 import numpy as np
 import pandas as pd
 
+# owt pkg
 from OpticalVariables import OpticalVariables
 from OWT import OWT
 
-import argparse
+# satellite data pkg
+import xarray as xr
+import zipfile
+import tempfile
+from lxml import etree
+import os
+from datetime import date
+
 
 def run_owt_csv(input_path_to_csv, input_sensor, output_path, output_option=1):
     d = pd.read_csv(input_path_to_csv)
@@ -58,9 +84,190 @@ def run_owt_csv(input_path_to_csv, input_sensor, output_path, output_option=1):
 
     return owt_result
 
-def run_owt_sat(input_path_to_sat, input_sensor, output_path):
-    # TODO processing satellite data...
-    return 0
+def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
+    today = date.today()
+
+    # product path - unzip in a temporary directory
+    zip_path = input_path_to_sat
+    temp_dir = tempfile.TemporaryDirectory()
+    temp_path = temp_dir.name
+    zip_ref = zipfile.ZipFile(zip_path, 'r')
+
+    try:
+        zip_ref.extractall(temp_path)
+        basename = os.path.basename(os.path.splitext(os.path.basename(zip_path))[0])
+        path = os.path.join(temp_path, basename)
+
+        save_path = output_path
+
+        # get xml - tree file
+        fn = os.path.join(path, 'xfdumanifest.xml') 
+        tree = etree.parse(fn)
+        namespaces = tree.getroot().nsmap
+        wavelengths = tree.xpath('//sentinel3:centralWavelength/text()', namespaces=namespaces)
+        wavelengths = [float(wl) for wl in wavelengths]
+        bandnames = tree.xpath('//sentinel3:band/@name', namespaces=namespaces)
+
+        # get WQSF_REFLECTANCE_RECOM flags
+        ds = xr.open_dataset(os.path.join(path, 'wqsf.nc'))
+        wqsf = ds['WQSF']
+        attrs = wqsf.attrs
+
+        flag_masks = attrs.get('flag_masks', [])
+        flag_meanings = attrs.get('flag_meanings', '').split()
+
+        # WATER or INLAND_WATER
+        WATER_mask = flag_masks[flag_meanings.index('WATER')]
+        INLAND_WATER_mask = flag_masks[flag_meanings.index('INLAND_WATER')]
+        water_mask = (wqsf & WATER_mask) | (wqsf & INLAND_WATER_mask)
+
+        # Initialize mask as True for everywhere
+        final_mask = water_mask.astype(bool)
+
+        # Exclude the listed flags
+        exclude_flags = [
+            'CLOUD', 'CLOUD_AMBIGUOUS', 'CLOUD_MARGIN', 'INVALID', 'COSMETIC',
+            'SATURATED', 'SUSPECT', 'HISOLZEN', 'HIGHGLINT', 'SNOW_ICE',
+            'AC_FAIL', 'WHITECAPS', 'ADJAC', 'RWNEG_O2', 'RWNEG_O3', 
+            'RWNEG_O4', 'RWNEG_O5', 'RWNEG_O6', 'RWNEG_O7', 'RWNEG_O8'
+        ]
+
+        for flag in exclude_flags:
+            mask = flag_masks[flag_meanings.index(flag)]
+            final_mask &= ~(wqsf & mask).astype(bool)
+
+        WQSF_REFLECTANCE_RECOM = final_mask.astype(int)
+
+        # read geo_coordinates
+        ds = xr.open_dataset(os.path.join(path, 'geo_coordinates.nc'))
+        lon = ds['longitude']
+        lat = ds['latitude']
+
+        # read reflectance data from files and combine them in one xr.nc
+        Ref_list = []
+
+        for i, bandname in enumerate(bandnames):
+            nc_file_path = os.path.join(path, f"{bandname}_reflectance.nc")
+
+            if os.path.exists(nc_file_path):
+                ds = xr.open_dataset(nc_file_path)
+                Ref_data = ds[f"{bandname}_reflectance"]
+                Ref_data.attrs['radiation_wavelength'] = wavelengths[i]
+                Ref_data.attrs['radiation_wavelength_unit'] = 'nm'
+                Ref_data = Ref_data.assign_coords(longitude = lon, latitude = lat)
+
+                Ref_list.append(Ref_data)
+            else:
+                print(f"File {nc_file_path} does not exist.")
+
+        ds_new = xr.merge(Ref_list)
+
+        # owt processing
+        reflectance_vars = np.array([ds_new[f"{bandname}_reflectance"].data for bandname in bandnames]).transpose(1, 2, 0)
+        # TODO: one may want Rrs as output directly instead of reflectance
+        Rrs_vars = reflectance_vars / np.pi
+
+        ov = OpticalVariables(Rrs=Rrs_vars, band=wavelengths, sensor=input_sensor)
+        owt = OWT(ov.AVW, ov.Area, ov.NDI)
+
+        ds_new = ds_new.drop_vars([f"{bandname}_reflectance" for bandname in bandnames])
+
+        ds_new.attrs = {
+            'Description': 'This dataset contains reflectance data and flags for ocean color remote sensing.',
+            'Source': os.path.basename(path),
+            "Author": "Shun Bi, shun.bi@outlook.com",
+            "CreatedDate": today.strftime("%d/%m/%Y"),
+        }
+
+        # combine flag into it and save out
+        # TODO: more flags should be added, e.g., sunglint, cloud risk, white scatt.
+
+        ds_new['flag'] = (['rows', 'columns'], WQSF_REFLECTANCE_RECOM.data.astype(np.int32))
+
+        ds_new['type_idx'] = (
+            ['rows', 'columns'], 
+            owt.type_idx.astype(np.int32),
+            {'Description': (
+                'Index value for optical water types. '
+                '-1: No data; '
+                '0: OWT 1; '
+                '1: OWT 2; '
+                '2: OWT 3a; '
+                '3: OWT 3b; '
+                '4: OWT 4a; '
+                '5: OWT 4b; '
+                '6: OWT 5a; '
+                '7: OWT 5b; '
+                '8: OWT 6; '
+                '9: OWT 7; '
+            )}
+        )
+        
+        AVW_clipped = np.where((owt.AVW >= 400) & (owt.AVW <= 800), owt.AVW, np.nan)
+        ds_new['AVW'] = (
+            ['rows', 'columns'], 
+            AVW_clipped.astype(np.float32),
+            {'Description': 'Apparent Visible Wavelength 400-800 nm'}
+        )
+
+        ds_new['Area'] = (
+            ['rows', 'columns'], 
+            owt.Area.astype(np.float32),
+            {'Description': 'Trapezoidal area of Rrs at RGB bands'}
+        )
+
+        NDI_clipped = np.where((owt.NDI >= -1) & (owt.NDI <= 1), owt.AVW, np.nan)
+        ds_new['NDI'] = (
+            ['rows', 'columns'], 
+            NDI_clipped.astype(np.float32),
+            {'Description': 'Normalized Difference Index of Rrs at G and B bands'}
+        )
+
+        # save membership matrix
+        u = owt.u
+        sum_u = np.sum(u, axis=2)
+        # norm_u = u / sum_u[:, :, np.newaxis]
+
+        ds_new['utot'] = (
+            ['rows', 'columns'], 
+            sum_u.astype(np.float32),
+            {'Description': 'Total membership values of ten water types'}
+        )
+
+        if output_option == 1:
+            pass
+        elif output_option == 2:
+            for sel_type in owt.typeName:
+                ds_new[f'U_OWT{sel_type}'] = (
+                    ['rows', 'columns'], 
+                    u[:,:,owt.typeName.index(sel_type)].astype(np.float32),
+                    {'Description': f'Membership values of optical water type {sel_type}'}
+                )        
+        else:
+            raise ValueError('The output_option should be either 1 or 2')
+
+        # for sel_type in owt.typeName:
+        #     ds_new[f'normU_{sel_type}'] = (
+        #         ['rows', 'columns'], 
+        #         norm_u[:,:,owt.typeName.index(sel_type)].astype(np.float32),
+        #         {'Description': f'Normalized membership values of optical water type {sel_type}'}
+        #         )
+
+        encoding = {
+            var: {
+                'zlib': True,
+                'complevel': 5,
+                'shuffle': True
+            }
+            for var in list(ds_new.data_vars)
+        }
+
+        ds_new.to_netcdf(os.path.join(save_path, f"{basename}_owt.nc"), encoding=encoding)
+
+    finally:
+        temp_dir.cleanup()
+        zip_ref.close()
+
 
 
 def main():
@@ -89,17 +296,4 @@ def main():
 if __name__ == "__main__":
 
     main()
-
-    # in terminal, try
-    # python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt'
-    # python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'MSI_S2A' --output 'data/results/owt_result_msi.txt'
-    # python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_olci.csv' --input_option 'csv' --sensor 'OLCI_S3A' --output 'data/results/owt_result_olci.txt'
-
-    # extensive output
-    # python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt' --output_option 2
-
-
-
-
-
 
