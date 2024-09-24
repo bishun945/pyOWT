@@ -95,6 +95,13 @@ def run_owt_csv(input_path_to_csv, input_sensor, output_path, output_option=1):
 
     return owt_result
 
+def find_file(directory, filename):
+    for root, dirs, files in os.walk(directory):
+        if filename in files:
+            return os.path.join(root, filename)
+    return None
+
+
 def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
     today = date.today()
 
@@ -107,7 +114,9 @@ def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
     try:
         zip_ref.extractall(temp_path)
         basename = os.path.basename(os.path.splitext(os.path.basename(zip_path))[0])
-        path = os.path.join(temp_path, basename)
+        # path = os.path.join(temp_path, basename)
+        path_xfdu = find_file(temp_path, 'xfdumanifest.xml')
+        path = os.path.dirname(path_xfdu)
 
         save_path = output_path
 
