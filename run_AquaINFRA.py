@@ -39,10 +39,21 @@ import os
 from datetime import date
 
 
+def read_csv_with_auto_sep(file_path): 
+    separators = [',', '\t', r'\s+']
+    for sep in separators:
+        try:
+            df = pd.read_csv(file_path, sep=sep)
+            if len(df.columns) > 1:
+                return df
+        except Exception as e:
+            continue
+    raise ValueError('Unable to read file with common separators: ' + ' '.join(separators))
+
 def run_owt_csv(input_path_to_csv, input_sensor, output_path, output_option=1):
-    d = pd.read_csv(input_path_to_csv)
+    d = read_csv_with_auto_sep(input_path_to_csv)
     Rrs = d.values.reshape(d.shape[0], 1, d.shape[1])
-    band = [int(x) for x in d.columns.tolist()]
+    band = [float(x) for x in d.columns.tolist()]
     
     input_sensor = None if input_sensor == "HYPER" else input_sensor
     ov = OpticalVariables(Rrs=Rrs, band=band, sensor=input_sensor)
