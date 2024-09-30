@@ -1,0 +1,78 @@
+{
+    "version": "0.0.1",
+    "id": "hereon-pyowt",
+    "title": {"en": "Hello pyOWT"},
+    "description": {
+        "en": "An example process that ..."
+    },
+    "jobControlOptions": ["sync-execute", "async-execute"],
+    "keywords": ["hello world", "example", "echo"],
+    "links": [{
+        "type": "text/html",
+        "rel": "about",
+        "title": "information",
+        "href": "https://github.com/bishun945/pyOWT",
+        "hreflang": "en-US"
+    }],
+    "inputs": {
+        "input_data_url": {
+            "title": "Input data",
+            "description": "URL to your input file. (TODO: Not quite sure what it needs to contain.) Or try the existing examples: \"Rrs_demo_AquaINFRA_hyper.csv\", \"Rrs_demo_AquaINFRA_msi.csv\", \"Rrs_demo_AquaINFRA_olci.csv\"",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "input_option": {
+            "title": "Type of input",
+            "description": "Type of input: \"csv\" for text data input; \"sat\" for satellite products input (e.g., Sentinel-3 OLCI Level-2)",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "sensor": {
+            "title": "Sensor name",
+            "description": "Name of you sensor. Check pyOWT documentation for supported sensors. Examples: \"HYPER\", \"AVW700\", \"MODIS_Aqua\", \"MODIS_Terra\", \"OLCI_S3A\", \"OLCI_S3B\", \"MERIS\", \"SeaWiFS\", \"HawkEye\", \"OCTS\", \"GOCI\", \"VIIRS_NPP\", \"VIIRS_JPSS1\", \"VIIRS_JPSS2\", \"CZCS\", \"MSI_S2A\", \"MSI_S2B\", \"OLI\", \"ENMAP_HSI\", \"CMEMS_HROC_L3_optics\", \"cmems_P1D400\", \"AERONET_OC_1\", \"AERONET_OC_2\".",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "output_option": {
+            "title": "Output option",
+            "description": "Output option. 1: for standard output; 2: for extensive output with memberships of all types",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        }
+    },
+    "outputs": {
+        "some_output": {
+            "title": "Standard output / what is this? TODO",
+            "description": "Standard output or extensive output. Please ask Martin Hieronimy or Shun Bi / HEREON for details. TODO,",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/json"
+            }
+        }
+        
+    },
+    "example": {
+        "inputs": {
+            "input_data_url": "Rrs_demo_AquaINFRA_hyper.csv",
+            "input_option": "csv",
+            "sensor": "MSI_S2A",
+            "output_option": "1"
+        }
+    }
+}
