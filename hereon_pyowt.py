@@ -12,15 +12,32 @@ LOGGER = logging.getLogger(__name__)
 
 
 '''
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
 
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data\": \"Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
+### Reading input csv from any URL:
+# Example 1: HYPER, Rrs_demo_AquaINFRA_hyper.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
 
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data\": \"Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
+# Example 2: MSI_S2A, Rrs_demo_AquaINFRA_msi.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
 
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 2}}"
+# Example 3: OLCI_S3A, Rrs_demo_AquaINFRA_olci.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
+
+### Reading the example files from server:
+# Example 1: HYPER, Rrs_demo_AquaINFRA_hyper.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
+
+# Example 2: MSI_S2A, Rrs_demo_AquaINFRA_msi.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
+
+# Example 3: OLCI_S3A, Rrs_demo_AquaINFRA_olci.csv
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
+
+### Extensive output:
+curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 2}}"
 
 '''
+
 
 #: Process metadata and description
 PROCESS_METADATA = {
@@ -42,7 +59,7 @@ PROCESS_METADATA = {
     'inputs': {
         'input_data_url': {
             'title': 'Input data',
-            'description': 'URL to your input file. Or try the existing examples: \"Rrs_demo_AquaINFRA_hyper.csv\", \"Rrs_demo_AquaINFRA_msi.csv\", \"Rrs_demo_AquaINFRA_olci.csv\"',
+            'description': 'URL to your input file. (TODO: Not quite sure what it needs to contain.) Or try the existing examples: \"Rrs_demo_AquaINFRA_hyper.csv\", \"Rrs_demo_AquaINFRA_msi.csv\", \"Rrs_demo_AquaINFRA_olci.csv\"',
             'schema': {
                 'type': 'string'
             },
@@ -83,8 +100,8 @@ PROCESS_METADATA = {
     },
     'outputs': {
         'some_output': {
-            'title': 'Standard output',
-            'description': 'Standard output or extensive output',
+            'title': 'Standard output / what is this? TODO',
+            'description': 'Standard output or extensive output. Please ask Martin Hieronimy or Shun Bi / HEREON for details. TODO,',
             'schema': {
                 'type': 'object',
                 'contentMediaType': 'application/json'
@@ -94,7 +111,7 @@ PROCESS_METADATA = {
     },
     'example': {
         'inputs': {
-            'input_data': 'https://....Rrs_demo_AquaINFRA_hyper.csv',
+            'input_data_url': 'Rrs_demo_AquaINFRA_hyper.csv',
             'input_option': 'csv',
             'sensor': 'MSI_S2A',
             'output_option': '1'
@@ -176,11 +193,12 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         downloadlink = self.config['download_url'] + downloadfilename
 
         # Build response containing the link
+        # TODO Better naming
         response_object = {
             "outputs": {
                 "some_output": {
-                    "title": "this is what you asked for...",
-                    "description": "please ask bi shun / martin hieronymi...",
+                    'title': self.metadata['outputs']["some_output"]['title'],
+                    'description': self.metadata['outputs']["some_output"]['description'],
                     "href": downloadlink
                 }
             }
