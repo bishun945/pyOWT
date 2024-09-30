@@ -2,6 +2,7 @@ from pandas import read_csv
 import numpy as np
 import os
 import yaml
+import json
 
 class OpticalVariables():
 
@@ -36,8 +37,21 @@ class OpticalVariables():
 
         # TODO: check the input band fits the selected sensor range
         # dont_TODO: if AVW ends by 700 nm, this list has to be modified
-        with open('data/sensor_band_library.yaml', 'r') as file:
+        path_sensor_band_library = 'data/sensor_band_library.yaml'
+
+        if not os.path.isfile(path_sensor_band_library):
+            # we're obviously in a different env with a different cwd, so read path from config
+            # config may be in cwd, or in a file referenced by env var, to be consistent with
+            # other AquaINFRA processes.
+            config_file_path = os.environ.get('PYOWT_CONFIG_FILE', "./config.json")
+            with open(config_file_path, 'r') as config_file:
+                config = json.load(config_file)
+                path_sensor_band_library = config['pyowt']['path_sensor_band_library']
+
+
+        with open(path_sensor_band_library, 'r') as file:
             sensor_lib = yaml.load(file, Loader=yaml.FullLoader)
+
 
         self.sensor_AVW_bands_library = sensor_lib['lib_800']['sensor_AVW_bands_library']
         self.sensor_RGB_bands_library = sensor_lib['lib_800']['sensor_RGB_bands_library']

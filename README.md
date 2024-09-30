@@ -88,6 +88,22 @@ Check the [example](/run_examples.py) file for more detailed demo runs:
 
 When you find any issues or bugs while running the module, please [open an issue](https://github.com/bishun945/pyOWT/issues) or directly contact [Shun Bi](Shun.Bi@hereon.de) with a reproducible script with data.
 
+# AquaINFRA details
+
+When running this as OGC-compliant web service in an installation of pygeoapi, please create a json config file `config.json` with the below contents (or add it to the general AquaINFRA config file), and define an environment variable called `PYOWT_CONFIG_FILE` that contains the path to it.
+
+```
+{
+    "download_dir": "/var/www/nginx/download/",
+    "download_url": "https://someserver/download/",
+    "pyowt": {
+        "input_data_dir": "/.../inputs/",
+        "path_sensor_band_library": ".../pygeoapi/process/pyOWT/data/sensor_band_library.yaml"
+    }
+}
+```
+
+
 # References
 
 - Bi and Hieronymi (2024). Holistic optical water type classification for ocean, coastal, and inland waters. Limnol Oceanogr. https://doi.org/10.1002/lno.12606
