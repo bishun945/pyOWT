@@ -60,8 +60,8 @@ PROCESS_METADATA = {
             'keywords': ['hereon', 'pyOWT']
         },
         'sensor': {
-            'title': 'Sensor name', # TODO Make enum!
-            'description': 'Name of you sensor. Which sensors are supported? Examples: MSI_S2A, HYPER, OLCI_S3A.',
+            'title': 'Sensor name',
+            'description': 'Name of you sensor. Check pyOWT documentation for supported sensors. Examples: \"HYPER\", \"AVW700\", \"MODIS_Aqua\", \"MODIS_Terra\", \"OLCI_S3A\", \"OLCI_S3B\", \"MERIS\", \"SeaWiFS\", \"HawkEye\", \"OCTS\", \"GOCI\", \"VIIRS_NPP\", \"VIIRS_JPSS1\", \"VIIRS_JPSS2\", \"CZCS\", \"MSI_S2A\", \"MSI_S2B\", \"OLI\", \"ENMAP_HSI\", \"CMEMS_HROC_L3_optics\", \"cmems_P1D400\", \"AERONET_OC_1\", \"AERONET_OC_2\".',
             'schema': {
                 'type': 'string'
             },
@@ -124,10 +124,18 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         self.job_id = job_id
 
     def execute(self, data, outputs=None):
-        input_data = data.get('input_data', 'bla')
+        input_data = data.get('input_data', 'Rrs_demo_AquaINFRA_hyper.csv')
         input_option = data.get('input_option')
         sensor = data.get('sensor')
         output_option = int(data.get('output_option'))
+
+        # Check sensor:
+        support_sensors = set(['HYPER', 'AVW700', 'MODIS_Aqua', 'MODIS_Terra', 'OLCI_S3A', 'OLCI_S3B', 'MERIS', 'SeaWiFS', 'HawkEye', 'OCTS', 'GOCI', 'VIIRS_NPP', 'VIIRS_JPSS1', 'VIIRS_JPSS2', 'CZCS', 'MSI_S2A', 'MSI_S2B', 'OLI', 'ENMAP_HSI', 'CMEMS_HROC_L3_optics', 'cmems_P1D400', 'AERONET_OC_1', 'AERONET_OC_2'])
+        #support_sensors = pd.read_csv("data/AVW_all_regression_800.txt").iloc[:, 0].astype(str)
+        # TODO: Read this from AVW_all_regression_800.txt everytime. Add HYPER manually.
+        # TODO: Ask Shun Bi: Why is HYPER included?
+        if not sensor in support_sensors:
+            raise ProcessorExecuteError('Sensor not supported: "%s". Please pick one of: %s' % (sensor, ', '.join(support_sensors)))
 
         # Download input file:
         # TODO: We are faking the path to the input data, as we have no URL right now!
