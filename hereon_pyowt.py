@@ -4,6 +4,7 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_csv
 from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_sat
 import os
+import json
 
 
 LOGGER = logging.getLogger(__name__)
@@ -109,6 +110,12 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         super().__init__(processor_def, PROCESS_METADATA)
         self.supports_outputs = True
         self.job_id = None
+        self.config = None
+
+        # Set config:
+        config_file_path = os.environ.get('PYOWT_CONFIG_FILE', "./config.json")
+        with open(config_file_path, 'r') as config_file:
+            self.config = json.load(config_file)
 
     def __repr__(self):
         return f'<HEREON_PyOWT_Processor> {self.name}'
@@ -125,13 +132,14 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         # Download input file:
         # TODO: We are faking the path to the input data, as we have no URL right now!
         LOGGER.info('Using input data file: %s' % input_data)
-        # TODO Not hardcode path!!
-        input_path = '/opt/pyg_upstream_dev/pygeoapi/pygeoapi/process/pyOWT/data/%s' % input_data
+        input_dir = self.config['pyowt']['input_data_dir']
+        input_path = input_dir.rstrip('/')+os.sep+input_data
+
         LOGGER.info('Using input data file: %s' % input_path)
 
         # Where to store output
         downloadfilename = 'pyowt_output_%s-%s.txt' % (sensor.lower(), self.job_id)
-        downloadfilepath = '/var/www/nginx/download'+os.sep+downloadfilename
+        downloadfilepath = self.config['download_dir']+downloadfilename
 
         # https://github.com/bishun945/pyOWT/blob/AquaINFRA/run_AquaINFRA.py
         if input_option.lower() == 'csv':
@@ -143,9 +151,7 @@ class HEREON_PyOWT_Processor(BaseProcessor):
             raise ProcessorExecuteError(err_msg)
 
         # Create download link:
-        downloadlink = 'https://aqua.igb-berlin.de/download/'+downloadfilename
-        # TODO: Not hardcode that URL! Get from my config file, or can I even get it from pygeoapi config?
-        # TODO: Again, carefully consider permissions of that directory!
+        downloadlink = self.config['download_url'] + downloadfilename
 
         # Build response containing the link
         response_object = {

@@ -1,0 +1,7 @@
+{
+    "download_dir": "/var/www/nginx/download/",
+    "download_url": "https://ourserver/download/",
+    "pyowt": {
+        "input_data_dir": "/.../inputs/"
+    }
+}
