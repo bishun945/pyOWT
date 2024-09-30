@@ -8,8 +8,11 @@ Shun Bi, Shun.Bi@outlook.com
 import numpy as np
 import pandas as pd
 
-from OpticalVariables import OpticalVariables
-from OWT import OWT
+#from OpticalVariables import OpticalVariables
+#from OWT import OWT
+from pygeoapi.process.pyOWT.OpticalVariables import OpticalVariables
+from pygeoapi.process.pyOWT.OWT import OWT
+
 
 import argparse
 
