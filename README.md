@@ -97,7 +97,8 @@ When running this as OGC-compliant web service in an installation of pygeoapi, p
     "download_dir": "/var/www/nginx/download/",
     "download_url": "https://someserver/download/",
     "pyowt": {
-        "input_data_dir": "/.../inputs/",
+        "example_input_data_dir": ".../pygeoapi/process/pyOWT/data/", # this is where the process will try to find existing example inputs
+        "input_data_dir": "/.../inputs/", # this is where the process will try to store downloaded inputs
         "path_sensor_band_library": ".../pygeoapi/process/pyOWT/data/sensor_band_library.yaml"
     }
 }

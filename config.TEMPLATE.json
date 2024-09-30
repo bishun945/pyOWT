@@ -2,7 +2,8 @@
     "download_dir": "/var/www/nginx/download/",
     "download_url": "https://ourserver/download/",
     "pyowt": {
-        "input_data_dir": "/.../inputs/",
+        "example_input_data_dir": ".../pygeoapi/process/pyOWT/data/",
+        "input_data_dir": "/.../inputs_temp/",
         "path_sensor_band_library": ".../pygeoapi/process/pyOWT/data/sensor_band_library.yaml"
     }
 }

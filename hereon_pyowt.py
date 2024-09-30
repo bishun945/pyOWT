@@ -5,6 +5,7 @@ from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_csv
 from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_sat
 import os
 import json
+import requests
 
 
 LOGGER = logging.getLogger(__name__)
@@ -39,9 +40,9 @@ PROCESS_METADATA = {
         'hreflang': 'en-US'
     }],
     'inputs': {
-        'input_data': {
+        'input_data_url': {
             'title': 'Input data',
-            'description': 'URL to your input file. For the moment, try just file name: Rrs_demo_AquaINFRA_hyper.csv or Rrs_demo_AquaINFRA_msi.csv or Rrs_demo_AquaINFRA_olci.csv',
+            'description': 'URL to your input file. Or try the existing examples: \"Rrs_demo_AquaINFRA_hyper.csv\", \"Rrs_demo_AquaINFRA_msi.csv\", \"Rrs_demo_AquaINFRA_olci.csv\"',
             'schema': {
                 'type': 'string'
             },
@@ -124,7 +125,7 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         self.job_id = job_id
 
     def execute(self, data, outputs=None):
-        input_data = data.get('input_data', 'Rrs_demo_AquaINFRA_hyper.csv')
+        input_data_url = data.get('input_data_url', 'Rrs_demo_AquaINFRA_hyper.csv')
         input_option = data.get('input_option')
         sensor = data.get('sensor')
         output_option = int(data.get('output_option'))
@@ -137,13 +138,26 @@ class HEREON_PyOWT_Processor(BaseProcessor):
         if not sensor in support_sensors:
             raise ProcessorExecuteError('Sensor not supported: "%s". Please pick one of: %s' % (sensor, ', '.join(support_sensors)))
 
-        # Download input file:
-        # TODO: We are faking the path to the input data, as we have no URL right now!
-        LOGGER.info('Using input data file: %s' % input_data)
-        input_dir = self.config['pyowt']['input_data_dir']
-        input_path = input_dir.rstrip('/')+os.sep+input_data
+        # Use example input file:
+        input_path = None
+        if input_data_url in ['Rrs_demo_AquaINFRA_hyper.csv', 'Rrs_demo_AquaINFRA_msi.csv', 'Rrs_demo_AquaINFRA_olci.csv']:
+            LOGGER.info('Using example input data file: %s' % input_data_url)
+            input_dir = self.config['pyowt']['example_input_data_dir']
+            input_path = input_dir.rstrip('/')+os.sep+input_data_url
 
-        LOGGER.info('Using input data file: %s' % input_path)
+        # ... Or download input file:
+        # TODO: Also allow user to paste CSV as POST request body/payload! - Check size though!
+        else:
+            LOGGER.info('Downloading input data file: %s' % input_data_url)
+            resp = requests.get(input_data_url)
+            if resp.status_code == 200:
+                input_dir = self.config['pyowt']['input_data_dir']
+                input_path = input_dir.rstrip('/')+os.sep+'inputs_%s' % self.job_id
+                LOGGER.debug('Writing input data file to: %s' % input_path)
+                with open(input_path, 'w') as myfile:
+                    myfile.write(resp.text)
+            else:
+                raise ProcessorExecuteError('Could not download input file (HTTP status %s): %s' % (resp.status_code, input_data_url))
 
         # Where to store output
         downloadfilename = 'pyowt_output_%s-%s.txt' % (sensor.lower(), self.job_id)
