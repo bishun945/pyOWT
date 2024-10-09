@@ -1,6 +1,7 @@
 {
     "version": "0.0.1",
     "id": "hereon-pyowt",
+    "use_case": "HEREON",
     "title": {"en": "Hello pyOWT"},
     "description": {
         "en": "An example process that ..."
