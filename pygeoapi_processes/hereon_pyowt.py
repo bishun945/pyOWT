@@ -15,26 +15,26 @@ LOGGER = logging.getLogger(__name__)
 
 ### Reading input csv from any URL:
 # Example 1: HYPER, Rrs_demo_AquaINFRA_hyper.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
 
 # Example 2: MSI_S2A, Rrs_demo_AquaINFRA_msi.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
 
 # Example 3: OLCI_S3A, Rrs_demo_AquaINFRA_olci.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"https://raw.githubusercontent.com/bishun945/pyOWT/refs/heads/AquaINFRA/data/Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
 
 ### Reading the example files from server:
 # Example 1: HYPER, Rrs_demo_AquaINFRA_hyper.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 1}}"
 
 # Example 2: MSI_S2A, Rrs_demo_AquaINFRA_msi.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_msi.csv\", \"input_option\":\"csv\", \"sensor\":\"MSI_S2A\", \"output_option\": 1}}"
 
 # Example 3: OLCI_S3A, Rrs_demo_AquaINFRA_olci.csv
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_olci.csv\", \"input_option\":\"csv\", \"sensor\":\"OLCI_S3A\", \"output_option\": 1}}"
 
 ### Extensive output:
-curl -X POST "https://aqua.igb-berlin.de/pygeoapi-dev/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 2}}"
+curl -X POST "http://localhost:5000/processes/hereon-pyowt/execution" -H "Content-Type: application/json" -d "{\"inputs\":{\"input_data_url\": \"Rrs_demo_AquaINFRA_hyper.csv\", \"input_option\":\"csv\", \"sensor\":\"HYPER\", \"output_option\": 2}}"
 
 '''
 
