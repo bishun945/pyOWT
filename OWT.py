@@ -173,7 +173,10 @@ class OWT():
         Returns:
             float: Transformed value
         """
-        y = (x**lamb - 1) / lamb
+        mask = (x > 0) & np.isfinite(x)
+        y = np.full_like(x, np.nan)
+        y[mask] = (x[mask]**lamb - 1) / lamb
+        # y = (x**lamb - 1) / lamb
         return y
 
     @staticmethod
