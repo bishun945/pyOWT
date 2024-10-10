@@ -26,9 +26,15 @@ import argparse
 import numpy as np
 import pandas as pd
 
-# owt pkg
-from OpticalVariables import OpticalVariables
-from OWT import OWT
+# import OWT pkg
+# the exception is for pygeoapi importing in AquaINFRA 
+try:
+    from OpticalVariables import OpticalVariables
+    from OWT import OWT
+except ModuleNotFoundError as e:
+    from pygeoapi.process.pyOWT.OpticalVariables import OpticalVariables
+    from pygeoapi.process.pyOWT.OWT import OWT
+
 
 # satellite data pkg
 import xarray as xr
