@@ -4,8 +4,8 @@ import pandas as pd
 from matplotlib.patches import Ellipse
 import os
 
-from OWT import OWT
-from OpticalVariables import OpticalVariables
+from pyowt.OWT import OWT
+from pyowt.OpticalVariables import OpticalVariables
 
 
 # Scatter plot ax limits

@@ -6,18 +6,18 @@ Examples:
 # run in terminal
 
 # csv as input
-python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt'
-python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'MSI_S2A' --output 'data/results/owt_result_msi.txt'
-python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_olci.csv' --input_option 'csv' --sensor 'OLCI_S3A' --output 'data/results/owt_result_olci.txt'
+python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'MSI_S2A' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_ocli.csv' --input_option 'csv' --sensor 'OLCI_S3A' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
 
 # extensive output
-python run_AquaINFRA.py --input 'data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'data/results/owt_result_hyper.txt' --output_option 2
+python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 2
 
 # satellite as input
 python run_AquaINFRA.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'OLCI_S3A' --output '/path/to/save' --output_option 1
 
 Shun Bi, shun.bi@outlook.com
-20.09.2024
+10.10.2024
 '''
 
 import argparse
@@ -29,8 +29,8 @@ import pandas as pd
 # import OWT pkg
 # the exception is for pygeoapi importing in AquaINFRA 
 try:
-    from OpticalVariables import OpticalVariables
-    from OWT import OWT
+    from pyowt.OpticalVariables import OpticalVariables
+    from pyowt.OWT import OWT
 except ModuleNotFoundError as e:
     from pygeoapi.process.pyOWT.OpticalVariables import OpticalVariables
     from pygeoapi.process.pyOWT.OWT import OWT
@@ -297,8 +297,11 @@ def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
 
 
 def main():
+    
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+    data_file_path = os.path.join(project_root, 'pyowt', 'data', 'AVW_all_regression_800.txt')
 
-    support_sensors = pd.read_csv("data/AVW_all_regression_800.txt").iloc[:, 0].astype(str)
+    support_sensors = pd.read_csv(data_file_path).iloc[:, 0].astype(str)
     support_sensors = ', '.join(support_sensors)
 
     parser = argparse.ArgumentParser(description='Perform Optical Water Type classification based on Bi and Hieronymi (2024)')

@@ -20,8 +20,16 @@ Version history
     - A new demo of Rrs updated in the folder `data`
     - `run_examples.py` add Google Drive link for demo satellite data
 
+0.50:
+    - Reorganize the structure for tidiness
+    - Add `projects` folder to contain scripts for different application.
+    - `projects` now has two folders, AquaINFRA for scripts related to the project, and zenodo for its data preparation
+    - Merge Merret's PR for AquaINFRA project which employs pygeoapi module for cloud processing
+    - Collect pyowt-related scripts to `pyowt` for better management.
+    - Have a `setup.py` for development install mode, `pip install -e .`
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.41"
+__version__ = "0.50"
 

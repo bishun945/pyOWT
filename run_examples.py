@@ -5,8 +5,8 @@
 if True:
     
     import pandas as pd
-    from OpticalVariables import OpticalVariables
-    from OWT import OWT
+    from pyowt.OpticalVariables import OpticalVariables
+    from pyowt.OWT import OWT
 
     d0 = pd.read_csv("./data/Rrs_demo.csv")
     d = d0.pivot_table(index='SampleID', columns='wavelen', values='Rrs')
@@ -28,7 +28,7 @@ if True:
     print('Result OWT:', owt_result)
 
     # OWT result visualization
-    from PlotOWT import PlotOV, PlotSpec
+    from pyowt.PlotOWT import PlotOV, PlotSpec
     PlotOV(owt)
     # PlotSpec(owt, ov)
 
@@ -41,8 +41,8 @@ if True:
 if True:
 
     # OWT
-    from OpticalVariables import OpticalVariables
-    from OWT import OWT
+    from pyowt.OpticalVariables import OpticalVariables
+    from pyowt.OWT import OWT
 
     # data processing
     from netCDF4 import Dataset as ds
@@ -89,7 +89,7 @@ if True:
 
     d = ds(fn, mode="r")
     name_var = list(d.variables.keys())
-    var_A4O_Rrs = str_match(name_var, "A4O_Rrs_\d+$")
+    var_A4O_Rrs = str_match(name_var, r"A4O_Rrs_\d+$")
     wavelen_A4O_Rrs = np.array([float(i.split("_")[-1]) for i in var_A4O_Rrs])
     Rrs_A4O = np.array([d.variables[x][:] for x in var_A4O_Rrs]).transpose(1, 2, 0)
 

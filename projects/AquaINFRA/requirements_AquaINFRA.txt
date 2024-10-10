@@ -1,0 +1,6 @@
+pygeoapi
+requests
+xarray
+lxml
+numpy
+pandas

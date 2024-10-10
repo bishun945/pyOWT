@@ -36,8 +36,9 @@ class OpticalVariables():
         self.NDI = None
 
         # TODO: check the input band fits the selected sensor range
-        # dont_TODO: if AVW ends by 700 nm, this list has to be modified
-        path_sensor_band_library = 'data/sensor_band_library.yaml'
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(base_dir, 'data')
+        path_sensor_band_library = os.path.join(data_dir, 'sensor_band_library.yaml')
 
         if not os.path.isfile(path_sensor_band_library):
             # we're obviously in a different env with a different cwd, so read path from config
