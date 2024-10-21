@@ -20,20 +20,49 @@ lib_800:
     - 551
     - 667
     - 870
-    CMEMS_HROC_L3_optics:
+    CMEMS_BAL_HROC:
     - 443
     - 492
     - 560
     - 665
     - 704
+    - 740
     - 783
     - 865
-    CZCS:
+    CMEMS_BAL_NRT:
+    - 400
+    - 412
+    - 443
+    - 490
+    - 510
+    - 560
+    - 620
+    - 665
+    - 674
+    - 682
+    - 709
+    - 779
+    - 866
+    CMEMS_MED_MYINT:
+    - 400
+    - 412
+    - 443
+    - 490
+    - 510
+    - 560
+    - 620
+    - 665
+    - 674
+    - 682
+    - 709
+    - 779
+    - 866
+    CZCS_NIMBUS7:
     - 443
     - 520
     - 550
     - 670
-    GOCI:
+    GOCI_COMS:
     - 412
     - 443
     - 490
@@ -42,7 +71,7 @@ lib_800:
     - 680
     - 745
     - 865
-    HawkEye:
+    HAWKEYE_SEAHAWK1:
     - 412
     - 447
     - 488
@@ -51,7 +80,7 @@ lib_800:
     - 670
     - 752
     - 867
-    MERIS:
+    MERIS_ENVISAT:
     - 413
     - 443
     - 490
@@ -108,7 +137,7 @@ lib_800:
     - 739
     - 780
     - 835
-    OCTS:
+    OCTS_ADEOS:
     - 412
     - 443
     - 490
@@ -146,13 +175,13 @@ lib_800:
     - 754
     - 779
     - 866
-    OLI:
+    OLI_LC8:
     - 443
     - 482
     - 561
     - 655
     - 865
-    SeaWiFS:
+    SEAWIFS_ORBVIEW2:
     - 412
     - 443
     - 490
@@ -184,18 +213,6 @@ lib_800:
     - 671
     - 745
     - 862
-    cmems_P1D400:
-    - 443
-    - 490
-    - 510
-    - 560
-    - 620
-    - 665
-    - 674
-    - 682
-    - 709
-    - 779
-    - 866
   sensor_RGB_bands_library:
     AERONET_OC_1:
     - 443
@@ -205,23 +222,31 @@ lib_800:
     - 443
     - 551
     - 667
-    CMEMS_HROC_L3_optics:
+    CMEMS_BAL_HROC:
     - 443
     - 560
     - 665
-    CZCS:
+    CMEMS_BAL_NRT:
+    - 443
+    - 560
+    - 665
+    CMEMS_MED_MYINT:
+    - 443
+    - 560
+    - 665
+    CZCS_NIMBUS7:
     - 443
     - 550
     - 670
-    GOCI:
+    GOCI_COMS:
     - 443
     - 555
     - 660
-    HawkEye:
+    HAWKEYE_SEAHAWK1:
     - 447
     - 556
     - 670
-    MERIS:
+    MERIS_ENVISAT:
     - 443
     - 560
     - 665
@@ -241,7 +266,7 @@ lib_800:
     - 442
     - 559
     - 665
-    OCTS:
+    OCTS_ADEOS:
     - 443
     - 565
     - 667
@@ -253,11 +278,11 @@ lib_800:
     - 443
     - 560
     - 665
-    OLI:
+    OLI_LC8:
     - 443
     - 561
     - 655
-    SeaWiFS:
+    SEAWIFS_ORBVIEW2:
     - 443
     - 555
     - 670
@@ -273,10 +298,6 @@ lib_800:
     - 443
     - 551
     - 671
-    cmems_P1D400:
-    - 443
-    - 560
-    - 665
   sensor_RGB_min_max:
     AERONET_OC_1:
       max: 866
@@ -284,19 +305,25 @@ lib_800:
     AERONET_OC_2:
       max: 870
       min: 412
-    CMEMS_HROC_L3_optics:
+    CMEMS_BAL_HROC:
       max: 865
       min: 443
-    CZCS:
+    CMEMS_BAL_NRT:
+      max: 866
+      min: 400
+    CMEMS_MED_MYINT:
+      max: 866
+      min: 400
+    CZCS_NIMBUS7:
       max: 670
       min: 443
-    GOCI:
+    GOCI_COMS:
       max: 865
       min: 412
-    HawkEye:
+    HAWKEYE_SEAHAWK1:
       max: 867
       min: 412
-    MERIS:
+    MERIS_ENVISAT:
       max: 865
       min: 413
     MODIS_Aqua:
@@ -311,7 +338,7 @@ lib_800:
     MSI_S2B:
       max: 835
       min: 442
-    OCTS:
+    OCTS_ADEOS:
       max: 862
       min: 412
     OLCI_S3A:
@@ -320,10 +347,10 @@ lib_800:
     OLCI_S3B:
       max: 866
       min: 400
-    OLI:
+    OLI_LC8:
       max: 865
       min: 443
-    SeaWiFS:
+    SEAWIFS_ORBVIEW2:
       max: 865
       min: 412
     VIIRS_JPSS1:
@@ -335,6 +362,3 @@ lib_800:
     VIIRS_SNPP:
       max: 862
       min: 410
-    cmems_P1D400:
-      max: 866
-      min: 443

@@ -118,6 +118,7 @@ def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
     zip_ref = zipfile.ZipFile(zip_path, 'r')
 
     try:
+        # start image processing...
         zip_ref.extractall(temp_path)
         basename = os.path.basename(os.path.splitext(os.path.basename(zip_path))[0])
         # path = os.path.join(temp_path, basename)
@@ -187,6 +188,14 @@ def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
                 print(f"File {nc_file_path} does not exist.")
 
         ds_new = xr.merge(Ref_list)
+
+        # end of image processing
+        # TODO: the reading above should be wrapped into `read_*` functions in pyowt module as they should be quite common...
+        # the common data interface should include (as a list):
+        # - Coordinates variables for outputing
+        # - Remote sensing reflectance (divided by pi if Rw is imported)
+        # - Binary flag for selecting valid pixels
+        # - Some extra elements if necessary
 
         # owt processing
         reflectance_vars = np.array([ds_new[f"{bandname}_reflectance"].data for bandname in bandnames]).transpose(1, 2, 0)
