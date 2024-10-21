@@ -3,4 +3,5 @@ pandas
 scipy
 PyYAML
 netCDF4
+xarray
 matplotlib

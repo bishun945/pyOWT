@@ -14,7 +14,7 @@ python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_
 python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 2
 
 # satellite as input
-python run_AquaINFRA.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'OLCI_S3A' --output '/path/to/save' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'OLCI_S3A' --output '/path/to/save' --output_option 1
 
 Shun Bi, shun.bi@outlook.com
 10.10.2024
@@ -260,12 +260,11 @@ def run_owt_sat(input_path_to_sat, input_sensor, output_path, output_option=1):
 
         # save membership matrix
         u = owt.u
-        sum_u = np.sum(u, axis=2)
-        # norm_u = u / sum_u[:, :, np.newaxis]
+        utot = owt.utot
 
         ds_new['utot'] = (
             ['rows', 'columns'], 
-            sum_u.astype(np.float32),
+            utot.astype(np.float32),
             {'Description': 'Total membership values of ten water types'}
         )
 

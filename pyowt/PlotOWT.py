@@ -32,7 +32,7 @@ class PlotOV:
         owt (OWT): OWT instance
     """
 
-    def __init__(self, owt):
+    def __init__(self, owt, show_label=True):
 
         if not _is_instance_of_OWT(owt):
             raise ValueError(
@@ -44,12 +44,12 @@ class PlotOV:
 
         # for background ellipse
         #   from spectral library
-        self.mean_OWT = owt.mean_OWT
-        self.covm_OWT = owt.covm_OWT
+        self.mean_OWT = owt.classInfo.mean_OWT
+        self.covm_OWT = owt.classInfo.covm_OWT
 
         #   from name and color code
-        self.color_OWT = owt.typeColor
-        self.name_OWT = owt.typeName
+        self.color_OWT = owt.classInfo.typeColHex
+        self.name_OWT = owt.classInfo.typeName
 
         # add NaN for unclassified inputs
         #   for those type_idx = -1 and type_str = 'NaN'
@@ -99,10 +99,14 @@ class PlotOV:
 
         for i in range(len(self.mean_OWT)):
             mean = self.mean_OWT[i, [0, 1]]
-            cov = self.covm_OWT[i, :2, :2]
+            # cov = self.covm_OWT[i, :2, :2]
+            cov = self.covm_OWT[:2, :2, i]
             color = self.color_OWT[i]
             type_name = self.name_OWT[i]
-            self.draw_ellipse(ax, mean[0], mean[1], cov, color, f"{type_name}")
+            if show_label:
+                self.draw_ellipse(ax, mean[0], mean[1], cov, color, f"{type_name}")
+            else:
+                self.draw_ellipse(ax, mean[0], mean[1], cov, color, "")
 
         for marker in unique_markers:
             mask = plt_marker == marker
@@ -124,10 +128,14 @@ class PlotOV:
 
         for i in range(len(self.mean_OWT)):
             mean = self.mean_OWT[i, [0, 2]]
-            cov = self.covm_OWT[i, [0, 2]][:, [0, 2]]
+            # cov = self.covm_OWT[i, [0, 2]][:, [0, 2]]
+            cov = self.covm_OWT[[0, 2], :][:, [0, 2], i]
             color = self.color_OWT[i]
             type_name = self.name_OWT[i]
-            self.draw_ellipse(ax, mean[0], mean[1], cov, color, f"{type_name}")
+            if show_label:
+                self.draw_ellipse(ax, mean[0], mean[1], cov, color, f"{type_name}")
+            else:
+                self.draw_ellipse(ax, mean[0], mean[1], cov, color, "")
 
         for marker in unique_markers:
             mask = plt_marker == marker
@@ -194,7 +202,6 @@ class PlotSpec:
         fill_alpha=0.2,
         spec_alpha=0.8,
         figsize=(12, 8),
-        spec_lib_file="data/OWT_mean_spec.csv",
     ):
         """Plot spectral distribution of OWT classification results
 
@@ -207,8 +214,7 @@ class PlotSpec:
             fill_alpha (float, optional): Alpha value for the ribbon of upper and lower ranges of OWT means. 
                 Default to 0.8
             spec_alpha (float, optional): Alpha value for input Rrs spectra. Default to 0.8.
-            figsize (tuple, optional): Figure size for plotting. Default to (12, 8).
-            spec_lib_file (str, optional): File path to mean spectra. Defaults to "data/OWT_mean_spec.csv".
+            figsize (tuple, optional): Figure size for plotting. Default to (12, 8)
         """
 
         if not _is_instance_of_OWT(owt):
@@ -224,6 +230,9 @@ class PlotSpec:
         # copy OWT attributes
         self.owt = owt
 
+        self.version = owt.version
+        spec_lib_file = f"data/{self.version}/OWT_mean_spec.csv"
+
         # for background spectra
         #   from spectral library
         proj_root = os.path.dirname(os.path.abspath(__file__))
@@ -231,8 +240,8 @@ class PlotSpec:
         self.spec_lib = pd.read_csv(self.spec_lib_file)
 
         #   from name and color code
-        self.color_OWT = owt.typeColor
-        self.name_OWT = owt.typeName
+        self.color_OWT = owt.classInfo.typeColHex
+        self.name_OWT = owt.classInfo.typeName
 
         # add NaN for unclassified inputs
         #   for those type_idx = -1 and type_str = 'NaN'
@@ -405,30 +414,30 @@ class PlotSpec:
 if __name__ == "__main__":
 
     """Test 1"""
-    # AVW_test = np.array([460, 600, 580])
-    # Area_test = np.array([0.5, 0.4, 0.6])
-    # NDI_test = np.array([-0.5, 0.2, 0.4])
+    AVW_test = np.array([460, 600, 580])
+    Area_test = np.array([0.5, 0.4, 0.6])
+    NDI_test = np.array([-0.5, 0.2, 0.4])
 
-    # owt = OWT(AVW=AVW_test, Area=Area_test, NDI=NDI_test)
-    # # print(owt.type_str)
-    # PlotOV(owt)
+    owt = OWT(AVW=AVW_test, Area=Area_test, NDI=NDI_test)
+    # print(owt.type_str)
+    PlotOV(owt)
 
     """Test 2"""
-    d0 = pd.read_csv("./data/Rrs_demo.csv")
-    d = d0.pivot_table(index="SampleID", columns="wavelen", values="Rrs")
-    owt_train = d0[d0["wavelen"] == 350].sort_values(by="SampleID").type.values
+    # d0 = pd.read_csv("./data/Rrs_demo.csv")
+    # d = d0.pivot_table(index="SampleID", columns="wavelen", values="Rrs")
+    # owt_train = d0[d0["wavelen"] == 350].sort_values(by="SampleID").type.values
 
-    # data preparation for `ov` and `owt` classes
-    Rrs = d.values
-    band = d.columns.tolist()
+    # # data preparation for `ov` and `owt` classes
+    # Rrs = d.values
+    # band = d.columns.tolist()
 
-    # add an unclassified spectrum for testing
-    Rrs = np.append(Rrs, np.repeat(0.5, len(band)).reshape(1, -1), axis=0)
+    # # add an unclassified spectrum for testing
+    # Rrs = np.append(Rrs, np.repeat(0.5, len(band)).reshape(1, -1), axis=0)
 
-    # create `ov` class to calculate three optical variables
-    ov = OpticalVariables(Rrs=Rrs, band=band)
+    # # create `ov` class to calculate three optical variables
+    # ov = OpticalVariables(Rrs=Rrs, band=band)
 
-    # create `owt` class to run optical classification
-    owt = OWT(ov.AVW, ov.Area, ov.NDI)
+    # # create `owt` class to run optical classification
+    # owt = OWT(ov.AVW, ov.Area, ov.NDI)
 
-    PlotSpec(owt, ov, norm=True, thre_u=0.5)
+    # PlotSpec(owt, ov, norm=True, thre_u=0.5)

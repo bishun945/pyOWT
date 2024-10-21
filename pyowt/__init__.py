@@ -28,8 +28,12 @@ Version history
     - Collect pyowt-related scripts to `pyowt` for better management.
     - Have a `setup.py` for development install mode, `pip install -e .`
 
+0.60:
+    - Add a new version of classification centroids which has been shrinked with smaller covariance
+    - Since different centroid versions were added, the data folder was revised correspondingly
+    - Add satellite_handlers for processing cmems and eumetsat olci level-2 products
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.50"
+__version__ = "0.60"
 
