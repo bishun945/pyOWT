@@ -1,0 +1,114 @@
+{
+    "version": "0.0.1",
+    "id": "owt-classification",
+    "use_case": "HEREON",
+    "title": {"en": "OWT Classification"},
+    "description": {
+        "en": "Optical Water Type classification for ocean, coastal and inland waters."
+    },
+    "jobControlOptions": ["sync-execute", "async-execute"],
+    "keywords": ["OWT", "classification", "pyOWT", "hereon"],
+    "links": [{
+        "type": "text/html",
+        "rel": "about",
+        "title": "information",
+        "href": "https://github.com/bishun945/pyOWT",
+        "hreflang": "en-US"
+    }],
+    "inputs": {
+        "input_data_url": {
+            "title": "Input data",
+            "description": "URL to your input file. Find example data on https://github.com/bishun945/pyOWT/tree/main/projects/AquaINFRA.",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "input_option": {
+            "title": "Type of input",
+            "description": "csv: for text data input (first line wavelength, following lines remote-sensing reflectance). sat: for satellite product input containing reflectance (e.g., Sentinel-3 OLCI Level-2)",
+            "schema": {
+                "type": "string",
+                "enum": [
+                    "csv",
+                    "sat"
+                ],
+                "default": "csv"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "sensor": {
+            "title": "Sensor name",
+            "description": "Spectral band configuration of satellite mission (includes adaptation to sensor spectral response functions).",
+            "schema": {
+                "type": "string",
+                "enum": [
+                    "HYPER",
+                    "AERONET_OC_1",
+                    "AERONET_OC_2",
+                    "CMEMS_BAL_HROC",
+                    "CMEMS_BAL_NRT",
+                    "CMEMS_MED_MYINT",
+                    "CZCS",
+                    "GOCI",
+                    "HawkEye",
+                    "MERIS",
+                    "ODIS_Aqua",
+                    "MODIS_Terra",
+                    "MSI_S2A",
+                    "MSI_S2B",
+                    "OCTS",
+                    "OLCI_S3A",
+                    "OLCI_S3B",
+                    "OLI",
+                    "SeaWiFS",
+                    "VIIRS_JPSS1",
+                    "VIIRS_JPSS2",
+                    "VIIRS_SNPP"
+                ],
+                "default": "HYPER"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        },
+        "output_option": {
+            "title": "Output option",
+            "description": "1: for standard output with five variables. 2: for extensive output including memberships of all water types.",
+            "schema": {
+                "type": "string",
+                "enum": [
+                    "1",
+                    "2"
+                ],
+                "default": "1"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": ["hereon", "pyOWT"]
+        }
+    },
+    "outputs": {
+        "owt_classification": {
+            "title": "Output of the OWT classification depending on input parameters.",
+            "description": "If input_option == csv, the output is a text file (.csv). If input_option == sat, the output is a NetCDF file (.nc) of the same dimensions and geo-reference as the input file. If output_option == 1, 5 Output variables: AVW: Apparent Visible Wavelength between 400 and 800 nm; Area: Trapezoidal area of remote-sensing reflectance at RGB bands; NDI: Normalized Difference Index of remote-sensing reflectance at green and red bands; Index value of water class; Total membership values from all ten water types. If output_option == 2, 15 Output variables; AVW: Apparent Visible Wavelength between 400 and 800 nm; Area: Trapezoidal area of remote-sensing reflectance at RGB bands; NDI: Normalized Difference Index of remote-sensing reflectance at green and red bands; Index value of water class; Total membership values from all ten water types; Weighted membership in OWT class 1; Weighted membership in OWT class 2; Weighted membership in OWT class 3a; Weighted membership in OWT class 3b; Weighted membership in OWT class 4a; Weighted membership in OWT class 4b; Weighted membership in OWT class 5a; Weighted membership in OWT class 5b; Weighted membership in OWT class 6; Weighted membership in OWT class 7",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/json"
+            }
+        }
+        
+    },
+    "example": {
+        "inputs": {
+            "input_data_url": "Rrs_demo_AquaINFRA_hyper.csv",
+            "input_option": "csv",
+            "sensor": "MSI_S2A",
+            "output_option": "1"
+        }
+    }
+}

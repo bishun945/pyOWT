@@ -46,7 +46,7 @@ PROCESS_METADATA = json.load(open(metadata_title_and_path))
 
 
 
-class HEREON_PyOWT_Processor(BaseProcessor):
+class OwtClassificationProcessor(BaseProcessor):
 
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
@@ -60,7 +60,7 @@ class HEREON_PyOWT_Processor(BaseProcessor):
             self.config = json.load(config_file)
 
     def __repr__(self):
-        return f'<HEREON_PyOWT_Processor> {self.name}'
+        return f'<OwtClassificationProcessor> {self.name}'
 
     def set_job_id(self, job_id: str):
         self.job_id = job_id
