@@ -32,8 +32,13 @@ Version history
     - Add a new version of classification centroids which has been shrinked with smaller covariance
     - Since different centroid versions were added, the data folder was revised correspondingly
     - Add satellite_handlers for processing cmems and eumetsat olci level-2 products
+
+0.61:
+    - add ENVI format reader in ./satellite_handlers which is supposed to read Liu's ENVI results but can be used (modified) for other ENVI results
+    - Add warning for eumetsat_olci_level2 if uninstalled packages are imported
+    - OpticalVariable now supports to find nearest waveband to calculate AVW (just like I did for RGB bands). However, it still needs more strict input checking...
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.60"
+__version__ = "0.61"
 

@@ -168,3 +168,6 @@ projects/zenodo/reshape_netcdf_temp_data/spec_bbp.csv
 projects/zenodo/reshape_netcdf_temp_data/spec_bp.csv
 projects/zenodo/reshape_netcdf_temp_data/spec_bw.csv
 projects/zenodo/reshape_netcdf_temp_data/spec_Rrs.csv
+
+# liu's mission on hold
+projects/Liu/*

@@ -1,17 +1,25 @@
 import xarray as xr
 import zipfile
 import tempfile
-from lxml import etree
 import os
 from datetime import date
 import numpy as np
 from pyowt.OpticalVariables import OpticalVariables
 from pyowt.OWT import OWT
 
+try:
+    from lxml import etree
+    lxml_installed = True
+except ImportError:
+    lxml_installed = False
+
+
 class eumetsat_olci_level2:
 
     def __init__(self, filename, sensor='OLCI_S3A', save_path=None, save=True):
-
+        if not lxml_installed:
+            raise ImportError("The 'lxml' package is required but not installed. Please install it using 'pip install lxml'.")
+        
         self.filename = filename
         self.sensor = sensor
 
@@ -36,14 +44,11 @@ class eumetsat_olci_level2:
             self.zip_ref.close()
 
     def create_temporary_dir(self):
-        # product path - unzip in a temporary directory
+        # TODO: create under the satellite file path?
         zip_path = self.filename
         self.temp_dir = tempfile.TemporaryDirectory()
         self.temp_path = self.temp_dir.name
         self.zip_ref = zipfile.ZipFile(zip_path, 'r')
-        # the temporary directory can deleted as:
-        #   self.temp_dir.cleanup()
-        #   self.zip_ref.close()
         self.zip_ref.extractall(self.temp_path)
         self.basename = os.path.basename(os.path.splitext(os.path.basename(zip_path))[0])
 
@@ -94,9 +99,7 @@ class eumetsat_olci_level2:
             mask = flag_masks[flag_meanings.index(flag)]
             final_mask &= ~(wqsf & mask).astype(bool)
 
-        WQSF_REFLECTANCE_RECOM = final_mask.astype(int)
-
-        self.WQSF_REFLECTANCE_RECOM = WQSF_REFLECTANCE_RECOM
+        self.WQSF_REFLECTANCE_RECOM = final_mask.astype(int)
 
     def read_geo_coordinates(self):
         ds = xr.open_dataset(os.path.join(self.path, 'geo_coordinates.nc'))
