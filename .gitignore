@@ -156,3 +156,18 @@ archive/
 test_running/
 data/GermanBight_20160720T093421_subset.nc
 type_owt.png
+test_martin_issued_bug.py
+projects/zenodo/owt_BH2024_training_data_olci.nc
+projects/zenodo/owt_BH2024_training_data_hyper.nc
+projects/zenodo/reshape_netcdf_temp_data/single_variable.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_ad.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_agp.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_aph.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_aw.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_bbp.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_bp.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_bw.csv
+projects/zenodo/reshape_netcdf_temp_data/spec_Rrs.csv
+
+# liu's mission on hold
+projects/Liu/*

@@ -2,6 +2,7 @@ from pandas import read_csv
 import numpy as np
 import os
 import yaml
+import json
 
 class OpticalVariables():
 
@@ -35,9 +36,23 @@ class OpticalVariables():
         self.NDI = None
 
         # TODO: check the input band fits the selected sensor range
-        # dont_TODO: if AVW ends by 700 nm, this list has to be modified
-        with open('data/sensor_band_library.yaml', 'r') as file:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(base_dir, 'data')
+        path_sensor_band_library = os.path.join(data_dir, 'sensor_band_library.yaml')
+
+        if not os.path.isfile(path_sensor_band_library):
+            # we're obviously in a different env with a different cwd, so read path from config
+            # config may be in cwd, or in a file referenced by env var, to be consistent with
+            # other AquaINFRA processes.
+            config_file_path = os.environ.get('PYOWT_CONFIG_FILE', "./config.json")
+            with open(config_file_path, 'r') as config_file:
+                config = json.load(config_file)
+                path_sensor_band_library = config['pyowt']['path_sensor_band_library']
+
+
+        with open(path_sensor_band_library, 'r') as file:
             sensor_lib = yaml.load(file, Loader=yaml.FullLoader)
+
 
         self.sensor_AVW_bands_library = sensor_lib['lib_800']['sensor_AVW_bands_library']
         self.sensor_RGB_bands_library = sensor_lib['lib_800']['sensor_RGB_bands_library']
@@ -129,8 +144,11 @@ class OpticalVariables():
 
 
     def calculate_AVW(self):
-        idx_for_AVW = (self.band >= self.sensor_band_min) & (self.band <= self.sensor_band_max)
-        bands_for_AVW = self.band[idx_for_AVW]
+        # idx_for_AVW = (self.band >= self.sensor_band_min) & (self.band <= self.sensor_band_max)
+        # bands_for_AVW = self.band[idx_for_AVW]
+        bands_for_AVW = [self.band[np.argmin(abs(self.band - v))].item() for v in self.sensor_AVW_bands_library[self.sensor]]
+        bands_for_AVW = np.array(bands_for_AVW)
+        idx_for_AVW = [np.where(self.band == band)[0][0].item() for band in bands_for_AVW if band in self.band]
         Rrs_for_AVW = self.Rrs[:, :, idx_for_AVW]
         self.AVW_init = np.sum(Rrs_for_AVW, axis=-1) / np.sum(Rrs_for_AVW / bands_for_AVW[None, None, :], axis=-1)
 

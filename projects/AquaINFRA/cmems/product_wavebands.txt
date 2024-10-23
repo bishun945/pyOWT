@@ -1,0 +1,37 @@
+Email from Martin (17.10.2024) contains brief description of some CMEMS data sets that can be used for pyOWT testing...
+
+Copernicus Marine Service
+ 
+CMEMS_BAL_HROC
+20230708_P1D_CMEMS_HROC_L3-optics_BAL_34V_100m-v01.nc
+(Baltic, from Sentinel-2, 100 m, C2RCC-Acolite, Brockmann)
+RRS443, RRS492, RRS560, RRS665, RRS704, RRS740, RRS783, RRS865
+ 
+CMEMS_ATL_MYINT
+20230708_cmems_obs-oc_atl_bgc-reflectance_myint_l3-olci-300m_P1D.nc
+(North Atlantic Ocean, from Sentinel-3, 300 m, GlobColour, Acri)
+RRS400, RRS412, RRS443, RRS490, RRS510, RRS560, RRS620, RRS665, RRS674, RRS681, RRS709
+ 
+CMEMS_BAL_NRT
+20241010_cmems_obs-oc_bal_bgc-reflectance_nrt_l3-olci-300m_P1D.nc
+(Baltic, from Sentinel-3, 300 m, Polymer, CNR)
+RRS400, RRS412_5, RRS442_5, RRS490, RRS510, RRS560, RRS620, RRS665, RRS673_75, RRS681_25, RRS708_75, RRS778_75, RRS865
+ 
+CMEMS_BAL_MYINT
+(Baltic, from diverse sensors, CNR)
+20230708_cmems_obs-oc_bal_bgc-reflectance_myint_l3-multi-1km_P1D.nc
+RRS412, RRS443, RRS490, RRS510, RRS560, RRS665
+ 
+CMEMS_MED_MYINT
+20230708_cmems_obs-oc_med_bgc-reflectance_myint_l3-olci-300m_P1D.nc
+(Mediterranean Sea, from Sentinel-3, 300 m, Polymer, CNR)
+RRS400, RRS412_5, RRS442_5, RRS490, RRS510, RRS560, RRS620, RRS665, RRS673_75, RRS681_25, RRS708_75, RRS778_75, RRS865
+ 
+ 
+Copernicus Land Service
+ 
+(Germany, from Sentinel-2, Polymer)
+Rw443_rep, Rw490_rep, Rw560_rep, Rw665_rep, Rw705_rep, Rw740_rep, Rw783_rep, Rw842_rep, Rw865_rep, Rw945_rep, Rw1375_rep, Rw1610_rep, Rw2190_rep à all not Rrs, but Rw!!!
+(Fully normalized water leaving reflectances at the waveband indicated in the layer name (443nm, 490nm, etc.)., using most representative spectrum within the aggregation period)
+ 
+https://land.copernicus.eu/en/products/water-bodies/lake-water-quality-near-real-time-v2-0-300m
