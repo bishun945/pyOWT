@@ -18,7 +18,7 @@
     "inputs": {
         "input_data_url": {
             "title": "Input data",
-            "description": "URL to your input file.",
+            "description": "URL to your input file. Find example data on https://github.com/bishun945/pyOWT/tree/main/projects/AquaINFRA.",
             "schema": {
                 "type": "string"
             },
@@ -78,7 +78,7 @@
         },
         "output_option": {
             "title": "Output option",
-            "description": "1: for standard output; 2: for extensive output with memberships of all types",
+            "description": "1: for standard output with five variables. 2: for extensive output including memberships of all water types.",
             "schema": {
                 "type": "string",
                 "enum": [
