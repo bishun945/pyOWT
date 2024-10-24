@@ -1,10 +1,10 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.61
+Version 0.62
 
 by [Shun Bi](Shun.Bi@outlook.com) 
 
-Last update 23.10.2024
+Last update 24.10.2024
 
 Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun945/OWT) for the water type classification and has been maintained independently from its original version.
 

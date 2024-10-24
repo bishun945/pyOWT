@@ -37,8 +37,12 @@ Version history
     - add ENVI format reader in ./satellite_handlers which is supposed to read Liu's ENVI results but can be used (modified) for other ENVI results
     - Add warning for eumetsat_olci_level2 if uninstalled packages are imported
     - OpticalVariable now supports to find nearest waveband to calculate AVW (just like I did for RGB bands). However, it still needs more strict input checking...
+
+0.62:
+    - Fixed the bug when sensor is None for AVW calculation (issue from Merret)
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.61"
+__version__ = "0.62"
 
