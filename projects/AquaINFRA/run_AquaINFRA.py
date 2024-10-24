@@ -32,8 +32,8 @@ try:
     from pyowt.OpticalVariables import OpticalVariables
     from pyowt.OWT import OWT
 except ModuleNotFoundError as e:
-    from pygeoapi.process.pyOWT.OpticalVariables import OpticalVariables
-    from pygeoapi.process.pyOWT.OWT import OWT
+    from pygeoapi.process.pyOWT.pyowt.OpticalVariables import OpticalVariables
+    from pygeoapi.process.pyOWT.pyowt.OWT import OWT
 
 
 # satellite data pkg

@@ -1,8 +1,8 @@
 import logging
 
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
-from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_csv
-from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_sat
+from pygeoapi.process.pyOWT.projects.AquaINFRA.run_AquaINFRA import run_owt_csv
+from pygeoapi.process.pyOWT.projects.AquaINFRA.run_AquaINFRA import run_owt_sat
 import os
 import json
 import requests
