@@ -146,10 +146,15 @@ class OpticalVariables():
     def calculate_AVW(self):
         # idx_for_AVW = (self.band >= self.sensor_band_min) & (self.band <= self.sensor_band_max)
         # bands_for_AVW = self.band[idx_for_AVW]
-        bands_for_AVW = [self.band[np.argmin(abs(self.band - v))].item() for v in self.sensor_AVW_bands_library[self.sensor]]
-        bands_for_AVW = np.array(bands_for_AVW)
-        idx_for_AVW = [np.where(self.band == band)[0][0].item() for band in bands_for_AVW if band in self.band]
-        Rrs_for_AVW = self.Rrs[:, :, idx_for_AVW]
+        if self.spectral_attr == "hyper":
+            bands_for_AVW = self.band
+            Rrs_for_AVW = self.Rrs
+        else:
+            bands_for_AVW = [self.band[np.argmin(abs(self.band - v))].item() for v in self.sensor_AVW_bands_library[self.sensor]]
+            bands_for_AVW = np.array(bands_for_AVW)
+            idx_for_AVW = [np.where(self.band == band)[0][0].item() for band in bands_for_AVW if band in self.band]
+            Rrs_for_AVW = self.Rrs[:, :, idx_for_AVW]
+
         self.AVW_init = np.sum(Rrs_for_AVW, axis=-1) / np.sum(Rrs_for_AVW / bands_for_AVW[None, None, :], axis=-1)
 
         if self.spectral_attr == "hyper":
