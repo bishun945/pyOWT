@@ -49,17 +49,35 @@ class ENVIImageReader:
 
         # Create lon/lat coordinate arrays
         target_spatial_ref = spatial_ref.CloneGeogCS()
-        transform = osr.CoordinateTransformation(spatial_ref, target_spatial_ref)
+        # transform = osr.CoordinateTransformation(spatial_ref, target_spatial_ref)
         lon_coords = np.zeros((nrows, ncols))
         lat_coords = np.zeros((nrows, ncols))
 
-        for i in range(nrows):
-            for j in range(ncols):
-                x = geotransform[0] + j * geotransform[1] + i * geotransform[2]
-                y = geotransform[3] + j * geotransform[4] + i * geotransform[5]
-                lat, lon, _ = transform.TransformPoint(x, y)
-                lat_coords[i, j] = lat
-                lon_coords[i, j] = lon
+        if spatial_ref.IsGeographic():
+            print("This image file doesn't have a projection and is Geographic.")
+            for i in range(nrows):
+                for j in range(ncols):
+                    lon = geotransform[0] + j * geotransform[1] + i * geotransform[2]
+                    lat = geotransform[3] + j * geotransform[4] + i * geotransform[5]
+                    lat_coords[i, j] = lat
+                    lon_coords[i, j] = lon
+        else:
+            transform = osr.CoordinateTransformation(spatial_ref, target_spatial_ref)
+            for i in range(nrows):
+                for j in range(ncols):
+                    x = geotransform[0] + j * geotransform[1] + i * geotransform[2]
+                    y = geotransform[3] + j * geotransform[4] + i * geotransform[5]
+                    lat, lon, _ = transform.TransformPoint(x, y)
+                    lat_coords[i, j] = lat
+                    lon_coords[i, j] = lon
+
+        # for i in range(nrows):
+        #     for j in range(ncols):
+        #         x = geotransform[0] + j * geotransform[1] + i * geotransform[2]
+        #         y = geotransform[3] + j * geotransform[4] + i * geotransform[5]
+        #         lat, lon, _ = transform.TransformPoint(x, y)
+        #         lat_coords[i, j] = lat
+        #         lon_coords[i, j] = lon
 
         # Read band data and create xarray variables
         data_vars = {}

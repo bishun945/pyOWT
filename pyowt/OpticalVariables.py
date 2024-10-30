@@ -3,6 +3,7 @@ import numpy as np
 import os
 import yaml
 import json
+from scipy.interpolate import interp1d
 
 class OpticalVariables():
 
@@ -71,6 +72,12 @@ class OpticalVariables():
             self.sensor_band_min = 400
             self.sensor_band_max = 800
             self.AVW_conver_coef = [0, 1, 0, 0, 0, 0]
+
+            if self.band.min() > self.sensor_band_min or self.band.max() < self.sensor_band_max:
+                raise ValueError(
+                    "Wavelength range should be 400 to 800 nm for hyperspectral Rrs. "
+                    f"The input is {self.band.min()} - {self.band.max()}"
+                    )
 
         else:
             
@@ -149,6 +156,21 @@ class OpticalVariables():
         if self.spectral_attr == "hyper":
             bands_for_AVW = self.band
             Rrs_for_AVW = self.Rrs
+
+            # check if is 1 nm interval from 400 to 800 nm
+            target_bands = np.arange(self.sensor_band_min, self.sensor_band_max + 1, 1)
+            is_1nm_interval = np.all(np.diff(bands_for_AVW) == 1)
+
+            if not is_1nm_interval:
+                X, Y, _ = Rrs_for_AVW.shape
+                Rrs_new = np.zeros((X, Y, len(target_bands)))
+                interp_func = interp1d(bands_for_AVW, Rrs_for_AVW, kind='linear', axis=-1, 
+                                       bounds_error=False, fill_value='extrapolate')
+                Rrs_new = interp_func(target_bands)
+                
+                bands_for_AVW = target_bands
+                Rrs_for_AVW = Rrs_new
+
         else:
             bands_for_AVW = [self.band[np.argmin(abs(self.band - v))].item() for v in self.sensor_AVW_bands_library[self.sensor]]
             bands_for_AVW = np.array(bands_for_AVW)

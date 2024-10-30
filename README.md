@@ -1,27 +1,13 @@
 # **pyOWT**: python library for Optical Water Type classification
 
-Version 0.62
-
-by [Shun Bi](Shun.Bi@outlook.com) 
-
-Last update 24.10.2024
-
 Note: this repo is translated from the R repo [`OWT`](https://github.com/bishun945/OWT) for the water type classification and has been maintained independently from its original version.
 
 # Install
 
-Clone the whole repo and cd to the folder. 
-
-Then, install the [requirements](/requirements.txt).
+Clone the whole repo to the your path and install it:
 
 ```console
-pip install -r requirements.txt
-```
-
-You can also install it via 
-
-```console
-pip install -e .
+pip install /path/to/pyowt
 ```
 
 # License
@@ -88,15 +74,17 @@ Check the [example](/run_examples.py) file for more detailed demo runs:
 
 </center>
 
-*Mean spectrum of simulated spectra for optical water types. Panel (A) displays the raw remote-sensing reflectance (unscaled), while Panel (B) shows the spectral normalized by trapezoidal-area. The positions of RGB bands are marked on the x-axis.*
+*Mean spectrum of simulated spectra for optical water types. Panel (A) displays the raw remote-sensing reflectance (unscaled), while Panel (B) shows the spectral normalized by trapezoidal-area. The positions of RGB bands are marked on the x-axis. Image Source: Bi and Hieronymi (2024)*
 
 # Bug rerport
 
 When you find any issues or bugs while running the module, please [open an issue](https://github.com/bishun945/pyOWT/issues) or directly contact [Shun Bi](Shun.Bi@outlook.com) with a reproducible script with data.
 
-# Project related content
+# Projects
 
-## AquaINFRA details
+The `projects` directory contains tasks that rely on the `pyowt` package but are maintained independently of `pyowt`.
+
+## AquaINFRA
 
 This part is supported by [Merret Buurman](merret.buurman@igb-berlin.de)
 
@@ -116,6 +104,18 @@ When running this as OGC-compliant web service in an installation of pygeoapi, p
 }
 ```
 
+## zenodo
+
+This part is supported by Shun Bi and Martin Hieronymi.
+
+The `projects/zenodo` directory contains R and python scripts used to generate NetCDF files for the training data set in Bi and Hieronymi (2024). These data sets, available in both hyperspectral and Sentinel-3 OLCI band configurations, are published on [zenodo](https://zenodo.org/records/12803329). Note that some files are too large to be uploaded to GitHub, but they are available upon request.
+
+# Contributors
+
+- Dr. Shun Bi - Project maintainer, developer
+- Dr. Martin Hieronymi (Hereon) - Reviewer, Support
+- Merret Buurman (IGB-Berlin) - Developer for AquaINFRA
+- Dr. Markus Konkol (52north) - Developer for AquaINFRA
 
 # References
 

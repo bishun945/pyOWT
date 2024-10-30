@@ -41,8 +41,15 @@ Version history
 0.62:
     - Fixed the bug when sensor is None for AVW calculation (issue from Merret)
 
+0.63:
+    - Rewrite OWT centroids generation codes (now for v01 and v02)
+    - pyowt.OpticalVariables now checks the input hyperspectral Rrs is ranging from 400 to 800 nm
+    - pyowt.OpticalVariables now interpolates hyperspectral Rrs into 1 nm interval if they are not
+    - satellite_handlers: detect projection for Liu's image files
+    - modified README.md in main
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.62"
+__version__ = "0.63"
 
