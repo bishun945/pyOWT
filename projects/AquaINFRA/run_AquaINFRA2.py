@@ -6,15 +6,15 @@ Examples:
 # run in terminal
 
 # csv as input
-python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
-python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'MSI_S2A' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
-python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_ocli.csv' --input_option 'csv' --sensor 'OLCI_S3A' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA2.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA2.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_msi.csv' --input_option 'csv' --sensor 'msi-sentine-2a' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA2.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_ocli.csv' --input_option 'csv' --sensor 'olci-s3a' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 1
 
 # extensive output
-python projects/AquaINFRA/run_AquaINFRA.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 2
+python projects/AquaINFRA/run_AquaINFRA2.py --input 'projects/AquaINFRA/data/Rrs_demo_AquaINFRA_hyper.csv' --input_option 'csv' --sensor 'HYPER' --output 'projects/AquaINFRA/results/owt_result_hyper.txt' --output_option 2
 
 # satellite as input
-python projects/AquaINFRA/run_AquaINFRA.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'OLCI_S3A' --output '/path/to/save' --output_option 1
+python projects/AquaINFRA/run_AquaINFRA2.py --input '/path/S3B_OL_2_WFR____20220703T075301_20220703T075601_20220704T171729_0179_067_363_2160_MAR_O_NT_003.SEN3.zip' --input_option 'sat' --sensor 'olci-s3a' --output '/path/to/save' --output_option 1
 
 Shun Bi, shun.bi@outlook.com
 10.10.2024

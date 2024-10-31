@@ -100,7 +100,7 @@ class OpticalVariables():
             proj_root = os.path.dirname(os.path.abspath(__file__))
             fn = os.path.join(proj_root, self.AVW_regression_coef)
             d = read_csv(fn)
-            self.AVW_convert_coef = d[d["variable"] == sensor][["0", "1", "2", "3", "4", "5"]].values.tolist()[0]
+            self.AVW_convert_coef = d[d["sensor"] == sensor][["0", "1", "2", "3", "4", "5"]].values.tolist()[0]
 
 
         # run calculation

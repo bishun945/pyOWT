@@ -48,8 +48,16 @@ Version history
     - satellite_handlers: detect projection for Liu's image files
     - modified README.md in main
 
+0.64:
+    - Reprocessed the spectral convolution based on SRF files downloaded from the NASA Ocean Color website
+    - The convoluted Rrs were then calculated multispectral AVW and used to perform regression analysis with hyperspectral AVW
+    - Add new functions pyowt/satellite_handlers/srf_convolution.py for the above work
+    - The pyowt/data/AVW_all_regression_800.txt file was updated
+    - The sensor names in pyowt/data/AVW_all_regression_800.txt has been updated according to the NASA netcdf files
+    - Demos in projects/AquaINFRA/run_AquaINFRA.py and projects/AquaINFRA/run_AquaINFRA2.py were revised due to sensor name changing
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.63"
+__version__ = "0.64"
 

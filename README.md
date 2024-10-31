@@ -76,6 +76,37 @@ Check the [example](/run_examples.py) file for more detailed demo runs:
 
 *Mean spectrum of simulated spectra for optical water types. Panel (A) displays the raw remote-sensing reflectance (unscaled), while Panel (B) shows the spectral normalized by trapezoidal-area. The positions of RGB bands are marked on the x-axis. Image Source: Bi and Hieronymi (2024)*
 
+# Supported band configurations
+
+The Spectral Response Functions (SRFs) for the satellite sensors used in `pyOWT` were obtained from the NASA [Ocean Color website](https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/). The naming convention for these SRFs follows the format `instrument-platform`, which is directly derived from corresponding NetCDF files associated with each sensor.
+
+- "HSI-EnMAP": from 426.5 to 797.0 nm
+- "OCI-PACE": from 400.2 to 799.4
+- "OCTS-adeos": [412, 443, 490, 516, 565, 667, 862]
+- "modis-aqua": [412, 443, 469, 488, 531, 547, 555, 645, 667, 678, 748, 859]
+- "GOCI-coms": [412, 443, 490, 555, 660, 680, 745, 865]
+- "MERIS-envisat": [413, 443, 490, 510, 560, 620, 665, 681, 709, 754, 779, 865]
+- "viirs-jpss-1": [411, 445, 489, 556, 667, 746, 868]
+- "viirs-jpss-2": [411, 445, 488, 555, 671, 747, 868]
+- "OLI-landsat-8": [443, 482, 561, 655, 865]
+- "SeaWiFS-orbview-2": [412, 443, 490, 510, 555, 670, 865]
+- "olci-s3a": [400, 412, 443, 490, 510, 560, 620, 665, 674, 682, 709, 754, 779, 866]
+- "olci-s3b": [400, 412, 443, 490, 510, 560, 620, 665, 674, 681, 709, 754, 779, 866]
+- "HAWKEYE-seahawk1": [412, 447, 488, 510, 556, 670, 752, 867]
+- "msi-sentinel-2a": [443, 492, 560, 665, 704, 740, 783, 835, 865]
+- "msi-sentinel-2b": [442, 492, 559, 665, 704, 739, 780, 835, 864]
+- "viirs-suomi-npp": [410, 443, 486, 551, 671, 745, 862]
+- "modis-terra": [412, 443, 469, 488, 531, 547, 555, 645, 667, 678, 748, 859]
+
+CMEMS setups
+- "CMEMS_BAL_HROC": [443, 492, 560, 665, 704, 740, 783, 865] # likely msi-sentinel-2a
+- "CMEMS_BAL_NRT": [400, 412, 443, 490, 510, 560, 620, 665, 674, 682, 709, 779, 866] # likely olci-s3a
+- "CMEMS_MED_MYINT": [400, 412, 443, 490, 510, 560, 620, 665, 674, 682, 709, 779, 866] # likely olci-s3a
+
+AERONET-OC setups
+- "AERONET_OC_1": [400, 412, 443, 490, 510, 560, 620, 665, 779, 866] # likely olci-s3a
+- "AERONET_OC_2": [412, 443, 490, 532, 551, 667, 870] # likely modis-aqua
+
 # Bug rerport
 
 When you find any issues or bugs while running the module, please [open an issue](https://github.com/bishun945/pyOWT/issues) or directly contact [Shun Bi](Shun.Bi@outlook.com) with a reproducible script with data.
@@ -124,3 +155,5 @@ The `projects/zenodo` directory contains R and python scripts used to generate N
 - Bi et al. (2023). Bio-geo-optical modelling of natural waters. Front. Mar. Sci. 10, 1196352. https://doi.org/10.3389/fmars.2023.1196352
 
 - Hieronymi et al. (2023). Ocean color atmospheric correction methods in view of usability for different optical water types. Front. Mar. Sci. 10, 1129876. https://doi.org/10.3389/fmars.2023.1129876 
+
+- Bi et al. (2024). Supplementary dataset to the publication "Bi, S., and Hieronymi, M. (2024). Holistic optical water type classification for ocean, coastal, and inland waters. Limnology & Oceanography" [Data set]. Zenodo. https://doi.org/10.5281/zenodo.12803329

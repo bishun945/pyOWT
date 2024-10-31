@@ -171,3 +171,6 @@ projects/zenodo/reshape_netcdf_temp_data/spec_Rrs.csv
 
 # liu's mission on hold
 projects/Liu/*
+
+projects/geemap/*
+projects/AVW_regression/*
