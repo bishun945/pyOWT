@@ -33,8 +33,8 @@ try:
     from pyowt.OWT import OWT
     from pyowt.satellite_handlers.eumetsat_olci_level2 import eumetsat_olci_level2
 except ModuleNotFoundError as e:
-    from pygeoapi.process.pyOWT.OpticalVariables import OpticalVariables
-    from pygeoapi.process.pyOWT.OWT import OWT
+    from pygeoapi.process.pyOWT.pyowt.OpticalVariables import OpticalVariables
+    from pygeoapi.process.pyOWT.pyowt.OWT import OWT
 
 
 # satellite data pkg
