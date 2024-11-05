@@ -1,8 +1,8 @@
 import logging
 
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
-from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_csv
-from pygeoapi.process.pyOWT.run_AquaINFRA import run_owt_sat
+from pygeoapi.process.pyOWT.projects.AquaINFRA.run_AquaINFRA import run_owt_csv
+from pygeoapi.process.pyOWT.projects.AquaINFRA.run_AquaINFRA import run_owt_sat
 import os
 import json
 import requests
@@ -120,9 +120,9 @@ class OwtClassificationProcessor(BaseProcessor):
         # TODO Better naming
         response_object = {
             "outputs": {
-                "some_output": {
-                    'title': self.metadata['outputs']["some_output"]['title'],
-                    'description': self.metadata['outputs']["some_output"]['description'],
+                "owt_classification": {
+                    'title': self.metadata['outputs']["owt_classification"]['title'],
+                    'description': self.metadata['outputs']["owt_classification"]['description'],
                     "href": downloadlink
                 }
             }
