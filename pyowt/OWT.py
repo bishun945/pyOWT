@@ -7,7 +7,7 @@ import os
 
 class OWT():
 
-    def __init__(self, AVW=None, Area=None, NDI=None, version='v02', thres_u=0.0001):
+    def __init__(self, AVW=None, Area=None, NDI=None, version='v01', thres_u=0.0001):
         """Initialize three optical variables for spectral classification
 
         Args:
@@ -76,6 +76,7 @@ class OWT():
         # Use Hieronymi et al. (2023) Table 3 to mask out non-classifiable inputs
         # if utot < thres_u, classifiability = 0; else = 1
         self.classifiability = np.full(self.AVW.shape, 1) 
+        self.classifiability[self.utot < self.thres_u] = 0
         self.classifiability[self.type_idx == -1] = 0
 
 
