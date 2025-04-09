@@ -172,5 +172,16 @@ projects/zenodo/reshape_netcdf_temp_data/spec_Rrs.csv
 # liu's mission on hold
 projects/Liu/*
 
-projects/geemap/*
+projects/geeowt_notebook/*
 projects/AVW_regression/*
+projects/EXT_DATASET/*
+projects/TCA/*
+projects/OLCI_adapter/*
+projects/lake_cci/*
+
+pyowt/geeowt/*
+
+pyowt/data/v99/*
+
+*test.ipynb
+

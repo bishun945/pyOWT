@@ -13,8 +13,8 @@ AVW_MIN = 430
 AVW_MAX = 730
 ABC_MIN = -3.6
 ABC_MAX = 5
-NDI_MIN = -0.8
-NDI_MAX = 0.9
+NDI_MIN = -1.0
+NDI_MAX = 1.0
 
 
 def _is_instance_of_OWT(variable):
@@ -32,7 +32,7 @@ class PlotOV:
         owt (OWT): OWT instance
     """
 
-    def __init__(self, owt, show_label=True):
+    def __init__(self, owt, show_label=True, abc_ndi=False):
 
         if not _is_instance_of_OWT(owt):
             raise ValueError(
@@ -89,7 +89,10 @@ class PlotOV:
         ########
 
         # Create figure with two subplots
-        fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+        if abc_ndi:
+            fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+        else:
+            fig, axs = plt.subplots(1, 2, figsize=(12, 5))
         # TODO return fig? and plt.show() it ?
 
         # Panel 1: AVW vs ABC
@@ -149,6 +152,35 @@ class PlotOV:
 
         ax.set_xlabel("AVW [nm]")
         ax.set_ylabel("NDI")
+
+        if abc_ndi==True:
+            # Panel 3: ABC vs NDI 
+            ax = axs[2]
+            ax.set_xlim(ABC_MIN, ABC_MAX)
+            ax.set_ylim(NDI_MIN, NDI_MAX)
+
+            for i in range(len(self.mean_OWT)):
+                mean = self.mean_OWT[i, [1, 2]]
+                cov = self.covm_OWT[[1, 2], :][:, [1, 2], i]
+                color = self.color_OWT[i]
+                type_name = self.name_OWT[i]
+                if show_label:
+                    self.draw_ellipse(ax, mean[0], mean[1], cov, color, f"{type_name}")
+                else:
+                    self.draw_ellipse(ax, mean[0], mean[1], cov, color, "")
+
+            for marker in unique_markers:
+                mask = plt_marker == marker
+                ax.scatter(
+                    self.ABC[mask],
+                    self.NDI[mask],
+                    color=plt_color[mask],
+                    marker=marker,
+                    zorder=5,
+                )
+
+            ax.set_xlabel(r"$\mathrm{A}_\mathrm{BC}$")
+            ax.set_ylabel("NDI")
 
         plt.tight_layout()
         plt.show()

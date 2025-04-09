@@ -56,8 +56,13 @@ Version history
     - The sensor names in pyowt/data/AVW_all_regression_800.txt has been updated according to the NASA netcdf files
     - Demos in projects/AquaINFRA/run_AquaINFRA.py and projects/AquaINFRA/run_AquaINFRA2.py were revised due to sensor name changing
 
+0.65:
+    - Bugs fixed for Sentinel-2 band setups, regression coefficients of which are updated correspondingly
+    - Tested a new version of centroid (shrunk) but probably will be deprecated in the future... 
+    - Added a new satellite handler for Dr. Liu's ENVI format data (basically converting them to netcdf file)
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.64"
+__version__ = "0.65"
 

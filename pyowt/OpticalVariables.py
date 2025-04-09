@@ -7,7 +7,7 @@ from scipy.interpolate import interp1d
 
 class OpticalVariables():
 
-    def __init__(self, Rrs, band, sensor=None):
+    def __init__(self, Rrs, band, sensor=None, version='v01'):
 
         if not isinstance(Rrs, np.ndarray):
 
@@ -31,6 +31,7 @@ class OpticalVariables():
         self.band = np.array(band)
 
         self.sensor = sensor
+        self.version = version
 
         self.AVW = None
         self.Area = None
@@ -195,8 +196,17 @@ class OpticalVariables():
 
 
     def calculate_NDI(self):
-        Rrs_for_NDI = self.Rrs[:, :, np.where(np.isin(self.band, self.sensor_RGB_bands[1:]))[0]] # [1:] for G and R
-        self.NDI = -np.diff(Rrs_for_NDI, axis=-1)[:, :, 0] / np.sum(Rrs_for_NDI, axis=-1)
+        r_blue = self.Rrs[:, :, np.where(np.isin(self.band, self.sensor_RGB_bands[0]))[0]]
+        r_green = self.Rrs[:, :, np.where(np.isin(self.band, self.sensor_RGB_bands[1]))[0]]
+        r_red = self.Rrs[:, :, np.where(np.isin(self.band, self.sensor_RGB_bands[2]))[0]]
+
+        if self.version == 'v99':
+            r_1 = np.maximum(r_blue, r_green)
+        else:
+            r_1 = r_green
+
+        NDI = (r_1 - r_red) / (r_1 + r_red)
+        self.NDI = NDI[:, :, 0]
 
 
     def run(self):
