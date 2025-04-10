@@ -142,6 +142,19 @@ lib_800:
     - 781.9
     - 789.5
     - 797.0
+    LakeCCI-MERIS:
+    - 413
+    - 443
+    - 490
+    - 510
+    - 560
+    - 620
+    - 665
+    - 681
+    - 709
+    - 754
+    - 779
+    - 885
     MERIS-envisat:
     - 413
     - 443
@@ -527,6 +540,10 @@ lib_800:
     - 442.0
     - 558.2
     - 663.1
+    LakeCCI-MERIS:
+    - 443
+    - 560
+    - 665
     MERIS-envisat:
     - 443
     - 560
@@ -612,6 +629,9 @@ lib_800:
     HSI-EnMAP:
       max: 797.0
       min: 420.9
+    LakeCCI-MERIS:
+      max: 885
+      min: 413
     MERIS-envisat:
       max: 865
       min: 413
