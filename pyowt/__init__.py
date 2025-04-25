@@ -61,6 +61,9 @@ Version history
     - Tested a new version of centroid (shrunk) but probably will be deprecated in the future... 
     - Added a new satellite handler for Dr. Liu's ENVI format data (basically converting them to netcdf file)
 
+0.66: 
+    - Add new option for OpticalVariables if given Rrs is a 4-d array, say (wavelen, time, lat, lon)
+
 '''
 
 __package__ = "pyOWT"

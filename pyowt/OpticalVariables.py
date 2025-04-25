@@ -25,8 +25,13 @@ class OpticalVariables():
         elif np.ndim(Rrs) == 3:
             # here assume shape[2] is wavelength
             self.Rrs = Rrs
+        elif np.ndim(Rrs) == 4:
+            # here assume (wavelen, time, lat, lon)
+            self.original_shape = Rrs.shape[1:] # shape of (time, lat, lon)
+            Rrs_ = Rrs.transpose(1, 2, 3, 0).reshape(-1, Rrs.shape[0])
+            self.Rrs = Rrs_.reshape(Rrs_.shape[0], 1, Rrs_.shape[1])
         else:
-            raise ValueError("Input 'Rrs' should only have 1, 2, or 3 dims!")
+            raise ValueError("Input 'Rrs' should only have 1-4 dims!")
 
         self.band = np.array(band)
 
@@ -223,6 +228,13 @@ class OpticalVariables():
         self.calculate_AVW()
         self.calculate_Area()
         self.calculate_NDI()
+
+    def shape_reverse(self, arr):
+        if hasattr(self, 'original_shape'):
+            arr = arr.reshape(self.original_shape)
+            return arr
+        else:
+            raise ValueError("Not 4d arr input and no original_shape")
     
 
 
