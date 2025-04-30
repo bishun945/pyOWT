@@ -63,9 +63,10 @@ Version history
 
 0.66: 
     - Add new option for OpticalVariables if given Rrs is a 4-d array, say (wavelen, time, lat, lon)
+    - Add support for HSI-PRISMA hyperspectral setups as requested by Alice Fabbretto
 
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.65"
+__version__ = "0.66"
 
