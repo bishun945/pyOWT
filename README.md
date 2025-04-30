@@ -80,8 +80,9 @@ Check the [example](/run_examples.py) file for more detailed demo runs:
 
 The Spectral Response Functions (SRFs) for the satellite sensors used in `pyOWT` were obtained from the NASA [Ocean Color website](https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/). The naming convention for these SRFs follows the format `instrument-platform`, which is directly derived from corresponding NetCDF files associated with each sensor.
 
-- "HSI-EnMAP": from 426.5 to 797.0 nm
-- "OCI-PACE": from 400.2 to 799.4
+- "HSI-EnMAP": from 420.9 to 797.0 nm
+- "OCI-PACE": from 400.2 to 799.4 nm
+- "HSI-PRISMA" from 407.0 to 796.1 nm
 - "OCTS-adeos": [412, 443, 490, 516, 565, 667, 862]
 - "modis-aqua": [412, 443, 469, 488, 531, 547, 555, 645, 667, 678, 748, 859]
 - "GOCI-coms": [412, 443, 490, 555, 660, 680, 745, 865]
@@ -106,6 +107,9 @@ CMEMS setups
 AERONET-OC setups
 - "AERONET_OC_1": [400, 412, 443, 490, 510, 560, 620, 665, 779, 866] # likely olci-s3a
 - "AERONET_OC_2": [412, 443, 490, 532, 551, 667, 870] # likely modis-aqua
+
+LakeCCI setups
+- "LakeCCI-MERIS": [413, 443, 490, 510, 560, 620, 665, 681, 709, 754, 779, 885] # likely MERIS-envisat
 
 # Bug rerport
 
