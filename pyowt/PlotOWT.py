@@ -32,7 +32,7 @@ class PlotOV:
         owt (OWT): OWT instance
     """
 
-    def __init__(self, owt, show_label=True, abc_ndi=False):
+    def __init__(self, owt, show_label=True, abc_ndi=False, show=True):
 
         if not _is_instance_of_OWT(owt):
             raise ValueError(
@@ -90,13 +90,13 @@ class PlotOV:
 
         # Create figure with two subplots
         if abc_ndi:
-            fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+            self.fig, self.axs = plt.subplots(1, 3, figsize=(15, 5))
         else:
-            fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+            self.fig, self.axs = plt.subplots(1, 2, figsize=(12, 5))
         # TODO return fig? and plt.show() it ?
 
         # Panel 1: AVW vs ABC
-        ax = axs[0]
+        ax = self.axs[0]
         ax.set_xlim(AVW_MIN, AVW_MAX)
         ax.set_ylim(ABC_MIN, ABC_MAX)
 
@@ -125,7 +125,7 @@ class PlotOV:
         ax.set_ylabel(r"$\mathrm{A}_\mathrm{BC}$")
 
         # Panel 2: AVW vs NDI
-        ax = axs[1]
+        ax = self.axs[1]
         ax.set_xlim(AVW_MIN, AVW_MAX)
         ax.set_ylim(NDI_MIN, NDI_MAX)
 
@@ -155,7 +155,7 @@ class PlotOV:
 
         if abc_ndi==True:
             # Panel 3: ABC vs NDI 
-            ax = axs[2]
+            ax = self.axs[2]
             ax.set_xlim(ABC_MIN, ABC_MAX)
             ax.set_ylim(NDI_MIN, NDI_MAX)
 
@@ -183,7 +183,9 @@ class PlotOV:
             ax.set_ylabel("NDI")
 
         plt.tight_layout()
-        plt.show()
+        
+        if show:
+            plt.show()
 
     @staticmethod
     def draw_ellipse(ax, mean_x, mean_y, cov, color, label, n_std=1.0):
@@ -216,7 +218,7 @@ class PlotOV:
             label,
             fontsize=12,
             color=color,
-            bbox=dict(facecolor="white", alpha=0.8, edgecolor="none"),
+            bbox=dict(facecolor="white", alpha=0.3, edgecolor="none"),
             ha="center",
             va="center",
             zorder=7,
@@ -234,6 +236,7 @@ class PlotSpec:
         fill_alpha=0.2,
         spec_alpha=0.8,
         figsize=(12, 8),
+        show=True,
     ):
         """Plot spectral distribution of OWT classification results
 
@@ -247,6 +250,8 @@ class PlotSpec:
                 Default to 0.8
             spec_alpha (float, optional): Alpha value for input Rrs spectra. Default to 0.8.
             figsize (tuple, optional): Figure size for plotting. Default to (12, 8)
+            show (bool, optional): if True, the figure will be plotted directly; 
+                otherwise, the fig and axs can be assessed from the PlotSpec instance.
         """
 
         if not _is_instance_of_OWT(owt):
@@ -314,13 +319,13 @@ class PlotSpec:
         n_rows = 3
         n_cols = 4
 
-        fig, axs = plt.subplots(
+        self.fig, self.axs = plt.subplots(
             n_rows, n_cols, figsize=figsize, sharex=True, sharey=True
         )
 
-        ax_unclassified = fig.add_subplot(n_rows, n_cols, n_rows * n_cols - 1)
+        ax_unclassified = self.fig.add_subplot(n_rows, n_cols, n_rows * n_cols - 1)
 
-        axs = axs.flatten()
+        axs = self.axs.flatten()
 
         # Original scale on Rrs [sr^-1]#
         # loop mean and shadow of spectra for each type
@@ -398,8 +403,8 @@ class PlotSpec:
             i_owt += 1
 
         # delete empty ax
-        fig.delaxes(axs[-1])
-        fig.delaxes(axs[-2])
+        self.fig.delaxes(axs[-1])
+        self.fig.delaxes(axs[-2])
 
         # Plot unclassified Rrs in the last ax without sharing y-axis
         unclassified_ind = np.where(self.type_idx == 10)[0]
@@ -440,36 +445,39 @@ class PlotSpec:
         plt.tight_layout()
         plt.subplots_adjust(wspace=0.1)
 
-        plt.show()
+        if show:
+            plt.show()
 
 
 if __name__ == "__main__":
 
     """Test 1"""
-    AVW_test = np.array([460, 600, 580])
-    Area_test = np.array([0.5, 0.4, 0.6])
-    NDI_test = np.array([-0.5, 0.2, 0.4])
+    if False:
+        AVW_test = np.array([460, 600, 580])
+        Area_test = np.array([0.5, 0.4, 0.6])
+        NDI_test = np.array([-0.5, 0.2, 0.4])
 
-    owt = OWT(AVW=AVW_test, Area=Area_test, NDI=NDI_test)
-    # print(owt.type_str)
-    PlotOV(owt)
+        owt = OWT(AVW=AVW_test, Area=Area_test, NDI=NDI_test)
+        # print(owt.type_str)
+        PlotOV(owt)
 
     """Test 2"""
-    # d0 = pd.read_csv("./data/Rrs_demo.csv")
-    # d = d0.pivot_table(index="SampleID", columns="wavelen", values="Rrs")
-    # owt_train = d0[d0["wavelen"] == 350].sort_values(by="SampleID").type.values
+    if True:
+        d0 = pd.read_csv("./data/Rrs_demo.csv")
+        d = d0.pivot_table(index="SampleID", columns="wavelen", values="Rrs")
+        owt_train = d0[d0["wavelen"] == 350].sort_values(by="SampleID").type.values
 
-    # # data preparation for `ov` and `owt` classes
-    # Rrs = d.values
-    # band = d.columns.tolist()
+        # data preparation for `ov` and `owt` classes
+        Rrs = d.values
+        band = d.columns.tolist()
 
-    # # add an unclassified spectrum for testing
-    # Rrs = np.append(Rrs, np.repeat(0.5, len(band)).reshape(1, -1), axis=0)
+        # add an unclassified spectrum for testing
+        Rrs = np.append(Rrs, np.repeat(0.5, len(band)).reshape(1, -1), axis=0)
 
-    # # create `ov` class to calculate three optical variables
-    # ov = OpticalVariables(Rrs=Rrs, band=band)
+        # create `ov` class to calculate three optical variables
+        ov = OpticalVariables(Rrs=Rrs, band=band)
 
-    # # create `owt` class to run optical classification
-    # owt = OWT(ov.AVW, ov.Area, ov.NDI)
+        # create `owt` class to run optical classification
+        owt = OWT(ov.AVW, ov.Area, ov.NDI)
 
-    # PlotSpec(owt, ov, norm=True, thre_u=0.5)
+        PlotSpec(owt, ov, norm=True, thre_u=0.5)
