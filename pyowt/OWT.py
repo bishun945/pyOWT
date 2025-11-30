@@ -47,6 +47,17 @@ class OWT():
 
         # load pre-trained centroids
         self.version = version
+
+        # warning of version
+        if self.version != 'v01':
+            import warnings
+            warnings.warn(
+                f"Version '{self.version}' is not the original set from Bi and Hieronymi (2024). "
+                "These centroids are under testing. Please use with caution.",
+                UserWarning,
+                stacklevel=2
+            )
+
         self.classInfo = self.load_centroids_version(version=self.version)
         # classInfo = self.load_centroids()
         # self.mean_OWT = classInfo["mean_OWT"]
