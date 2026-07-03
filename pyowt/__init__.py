@@ -65,8 +65,10 @@ Version history
     - Add new option for OpticalVariables if given Rrs is a 4-d array, say (wavelen, time, lat, lon)
     - Add support for HSI-PRISMA hyperspectral setups as requested by Alice Fabbretto
 
+0.67:
+    - Add NumPy 2.0 compatible trapezoidal area calculation while keeping fallback support for older NumPy versions
+
 '''
 
 __package__ = "pyOWT"
-__version__ = "0.66"
-
+__version__ = "0.67"
